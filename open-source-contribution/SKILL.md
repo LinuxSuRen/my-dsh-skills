@@ -1,7 +1,7 @@
 ---
 name: open-source-contribution
-description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范。
-whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档；不限于特定项目。
+description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善。
+whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面；不限于特定项目。
 ---
 
 # 开源贡献规范
@@ -96,3 +96,11 @@ whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/�
 - 重点内容加粗或着重强调；
 - 明确受众群体，站在受众角度确保参考价值；使用合适的人称代词；
 - 完稿后自己通读一遍再发布。
+
+## 6. 仓库门面（About 与 README）
+
+开源仓库应在第一时间让陌生开发者看懂项目是做什么的：
+
+- **GitHub About**：一句话准确描述项目是什么、解决什么问题，不堆砌关键词；用小写 kebab-case 的 topics 增加可发现性；有官网或文档时填写 homepage。
+- **README**：面向「第一次听说本项目的人」写作，至少覆盖：项目是什么、解决什么问题；快速开始（安装 + 最小可用示例）；使用与配置方式；如何贡献（链接贡献指南）；License。badge 等装饰不替代上述内容。
+- 新建开源仓库或完善仓库门面时，逐项检查以上内容是否**简洁、准确、与项目现状一致**。
