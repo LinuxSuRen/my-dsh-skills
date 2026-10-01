@@ -31,13 +31,24 @@ whenToUse: 承担任何软硬件研发任务时使用——方案设计、写代
 ### 分支保护
 
 - **永远不直接推主干分支（master/main）。** 经 feature/fix 分支 + PR/MR 合入。
-- 新需求先切回主干拉取最新（`git checkout master && git pull`），再从最新主干建新分支。
+- 新需求先取最新主干（`git fetch origin`），再从最新 `origin/master` 建新分支；独立新需求直接用 git worktree 创建（见下），无需切换当前检出。
 - **是否新建分支必须先问研发确认**；已有功能分支的后续修改默认在原分支继续。
 - 在主干分支上收到改代码请求时，必须先建分支再动手；push 前必须检查当前分支。
+
+### 独立需求与 git worktree
+
+- **需求开发开始前，先与研发确认这是否为一个独立新需求**：
+  - 是 → 用 `git worktree` 开辟独立并行工作区，避免与当前检出上的其他工作互相干扰——不 stash、不切分支、不破坏依赖安装与构建缓存；
+  - 否（小修、延续已有需求、文档微调等）→ 在现有检出上按常规建分支即可，不额外开 worktree。
+- **一个需求一个分支、一个 worktree**：worktree 目录名与分支名共用同一需求标识（分支可带 `feat/` 等类型前缀）。git 不允许同一分支被两个 worktree 同时检出，天然保证一一对应。
+- 基于最新主干创建：`git fetch origin && git worktree add -b feat/<req> ../<repo>.worktrees/<req> origin/master`；需求依赖另一个未合并的需求分支时，显式基于该分支创建并向研发说明。
+- worktree 内首次初始化注意：submodule 需 `git submodule update --init`；依赖目录（node_modules 等）与构建缓存不共享，按需重装。
+- 需求完成（PR 合并）后及时清理：`git worktree remove` + `git branch -d`，失效条目定期 `git worktree prune`；禁止长期堆积废弃 worktree。
 
 ### 跨仓库一致性
 
 - 一次修改涉及多个仓库时，分支名保持一致，体现本次改动核心内容（如 `feat/xxx-yyy`）。
+- **一个需求跨多仓库时，所有仓库的分支名/worktree 名统一为该需求标识**，各仓库 PR 标题注明同一需求，便于跨仓库追踪与批量合并。
 
 ## 3. 验证策略
 
