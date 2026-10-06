@@ -1,7 +1,7 @@
 ---
 name: open-source-contribution
-description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善。
-whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面；不限于特定项目。
+description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善、CLI 工具收录（hd-home）。
+whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面、判断开源 CLI 工具是否收录进 hd-home；不限于特定项目。
 ---
 
 # 开源贡献规范
@@ -104,3 +104,13 @@ whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/�
 - **GitHub About**：一句话准确描述项目是什么、解决什么问题，不堆砌关键词；用小写 kebab-case 的 topics 增加可发现性；有官网或文档时填写 homepage。
 - **README**：面向「第一次听说本项目的人」写作，至少覆盖：项目是什么、解决什么问题；快速开始（安装 + 最小可用示例）；使用与配置方式；如何贡献（链接贡献指南）；License。badge 等装饰不替代上述内容。
 - 新建开源仓库或完善仓库门面时，逐项检查以上内容是否**简洁、准确、与项目现状一致**。
+
+## 7. CLI 工具收录（hd-home）
+
+- **触发条件**（需同时满足）：当前项目是开源项目；属于命令行工具（CLI）；GitHub Releases 上有对应的二进制资产。
+- 满足时**提示研发**是否把项目收录到 [linuxsuren/hd-home](https://github.com/linuxsuren/hd-home)（`hd` 下载器的工具注册表，收录后可通过 `hd get <name>` 安装）；**研发同意后才行动**，不得擅自提交。
+- 收录方式：向 hd-home 提 PR 新增 `config/<org>/<repo>.yml`，字段参照其 [CONTRIBUTION.md](https://github.com/linuxsuren/hd-home/blob/master/CONTRIBUTION.md)：
+  - `filename` 用 `{{.Name}}`、`{{.OS}}`、`{{.Arch}}`、`{{.Version}}` 模板匹配 release 资产名；
+  - 按需提供 `binary`（压缩包内二进制名）、`targetBinary`、`tar`、`formatOverrides`、`replacements`、`categories`、`versionCmd` 等；
+  - **禁止直接编辑 hd-home 的 README.md**——它由 `README.tpl` 经 yaml-readme 自动生成。
+- 提交前先确认研发的分支策略；PR 描述给出工具名、仓库链接与安装验证方式（如 `hd get <name>`）。
