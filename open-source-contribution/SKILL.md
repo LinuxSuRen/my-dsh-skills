@@ -1,7 +1,7 @@
 ---
 name: open-source-contribution
-description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善、CLI 工具收录（hd-home）。
-whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面、判断开源 CLI 工具是否收录进 hd-home；不限于特定项目。
+description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。
+whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面、判断开源 CLI 工具是否收录进 hd-home、为开源仓库配置自动化；不限于特定项目。
 ---
 
 # 开源贡献规范
@@ -114,3 +114,15 @@ whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/�
   - 按需提供 `binary`（压缩包内二进制名）、`targetBinary`、`tar`、`formatOverrides`、`replacements`、`categories`、`versionCmd` 等；
   - **禁止直接编辑 hd-home 的 README.md**——它由 `README.tpl` 经 yaml-readme 自动生成。
 - 提交前先确认研发的分支策略；PR 描述给出工具名、仓库链接与安装验证方式（如 `hd get <name>`）。
+
+## 8. 开源仓库自动化（GitHub Actions）
+
+GitHub 开源项目**推荐全部配备**以下自动化；agent 检查开源仓库时发现缺失，应提示研发补充：
+
+- **CI**：push/PR 触发构建 + 测试（按技术栈选 `go test`、`npm test` 等）；
+- **Lint**：静态检查（golangci-lint、eslint 等），可并入 CI job；
+- **Release**：打 tag 触发多平台构建并发布二进制或制品；
+- **CodeQL**：安全漏洞扫描（`.github/workflows/codeql.yml`）；
+- **Dependabot**：依赖自动更新（`.github/dependabot.yml`，覆盖包管理与 github-actions 生态）。
+
+新增或修改 workflow 走 PR；遵循最小权限原则（默认 `permissions: contents: read`，发布 job 才给 `contents: write`）。
