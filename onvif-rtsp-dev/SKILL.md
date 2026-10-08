@@ -57,6 +57,10 @@ whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、
 ## 7. RTP 打包
 
 - **H.264(RFC 6184)**:单 NAL ≤MTU 直封装;超长分片 FU-A,marker 只在帧末片;去起始码
+- **JPEG(RFC 2435)**:主头 8B = type-specific(1)|fragment-offset(3)|type(1)|quality(1)|width/8(1)|height/8(1);熵数据按字节分片,marker 仅末片
+  - type 0=4:2:2、1=4:2:0,由 **SOF 首分量采样因子**决定(0x21→0,0x22→1);宽高同样从 SOF 动态解析,**禁止写死分辨率**
+  - quality=255 时首片附量化表头(MBZ 2B+表长 2B)+64 字节裸表序列;提取 DQT 时去掉每表 1 字节表 ID
+  - **含 DRI 重启标记的帧不可直接打包**:type 64+ 附 Restart Marker Header 的规范做法 ffmpeg rtpdec_jpeg 不支持(Unimplemented,直接丢包)——部分相机 HAL 默认输出带 DRI 的 JPEG(OPPO 实测),采集层需重编码归一化(BitmapFactory→compress 顺带统一 Huffman、去 EXIF)
 - **AAC(RFC 3640)**:载荷 = AU-headers-length(2B,bit 计)=0x0010 + AU header(13bit 尺寸<<3 + 3bit index)+ AAC 裸帧;每 AU 固定 1024 样本做时间戳步进
 - **G.711**:1 字节=1 样本;20ms 一包(8k 下 160 字节)
 - 时间戳:视频 90kHz、音频按采样率时钟;**整条流(含参数集)严格单调递增**(同毫秒多包强制 +1),否则客户端报 non-monotonic DTS;同一接入单元(SPS/PPS/IDR)共享同一时间戳

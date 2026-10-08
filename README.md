@@ -12,6 +12,9 @@
 | [`branching-workflow`](branching-workflow/SKILL.md) | 每次提交/推送前必须先询问研发：新建分支还是当前分支、走 PR 还是直推；不得擅自决定分支策略。 |
 | [`open-source-contribution`](open-source-contribution/SKILL.md) | 开源贡献规范：Issue/PR 提交要求、Review 礼仪、good-first-issue 模板、开源文档写作、仓库门面（About/README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。提炼自 [open-source-best-practice](https://github.com/LinuxSuRen/open-source-best-practice)。 |
 | [`android-device-debugging`](android-device-debugging/SKILL.md) | 安卓真机联调方法论：adb 无线调试配对、各厂商 ROM 陷阱（OPPO 冻结器与授权限制、华为 HDC、定制板 app-idle 强停）、相机资源战日志分析、ANR 定位、USB 隧道隔离网络故障、Android CI 构建静默失败根因清单。提炼自 tv-uvc-streamer 多设备实战（小米电视/工控板/OPPO/联想 Android 16）。 |
+| [`onvif-rtsp-dev`](onvif-rtsp-dev/SKILL.md) | ONVIF 与 RTSP/RTP 音视频流开发方法论：WS-Discovery、SOAP 多 Profile、PTZ、对讲回传、TCP interleaved、SDP 多轨协商、H.264/AAC/G.711/JPEG(RFC 2435) 打包、ffmpeg 跨平台采集、私有协议适配与实测陷阱。跨平台（Go/Java/ArkTS 通用）。 |
+| [`ohos-media-dev`](ohos-media-dev/SKILL.md) | 鸿蒙音视频应用开发方法论：Camera Kit 多摄并发、HCODEC 多实例与码率 int64 键、NV12 32 对齐、OHAudio 采集/播放、长时任务与熄屏、后台相机限制、HAL 超时自愈。 |
+| [`android-camera-dev`](android-camera-dev/SKILL.md) | 安卓相机采集与推流开发方法论：Camera2 多摄并发降级、JPEG 直出/YUV 回退、DRI 归一化、JPEG_ORIENTATION 方向跟随、驱逐自愈、HAL 卡死防护、资源战 dumpsys 分析。真机实测四类设备。 |
 | [`skill-refresh`](skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
 | [`skill-distillation`](skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
 
