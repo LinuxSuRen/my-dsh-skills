@@ -13,6 +13,19 @@
 | [`open-source-contribution`](open-source-contribution/SKILL.md) | 开源贡献规范：Issue/PR 提交要求、Review 礼仪、good-first-issue 模板、开源文档写作、仓库门面（About/README）完善、CLI 工具收录（hd-home）。提炼自 [open-source-best-practice](https://github.com/LinuxSuRen/open-source-best-practice)。 |
 | [`skill-refresh`](skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
 
+## 通过 CLI 安装（askills）
+
+本仓库提供 Go 编写的 CLI `askills`，把全部技能嵌入单个二进制，一条命令安装到各 AI 编码工具：
+
+```bash
+go run ./cmd/askills list               # 查看内置技能
+go run ./cmd/askills install            # 全部技能 → ~/.agents/skills（dsh、codex、opencode 等共享）
+go run ./cmd/askills install --tool dsh # → ~/.dsh/skills（--tool 支持 dsh / opencode / codex / all）
+go run ./cmd/askills uninstall          # 移除已安装的技能
+```
+
+默认目标 `~/.agents/skills` 是 [Agent Skills](https://agentskills.io/) 开放标准的共享目录，dsh、codex、opencode 等 agents 兼容工具都会发现它；也可用 `--dir` 指定任意目录。安装是覆盖式、幂等的，重跑即为升级。
+
 ## 如何使用
 
 每个技能是一个目录，内含带 YAML frontmatter 的 `SKILL.md`（`name` + `description` 为必填，`whenToUse` 可选）。DSH 的 skill 文件系统提供商会扫描各根目录并监听变化，添加或修改后无需重启。
