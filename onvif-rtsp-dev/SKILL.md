@@ -1,7 +1,7 @@
 ---
 name: onvif-rtsp-dev
-description: ONVIF 与 RTSP/RTP 音视频流开发方法论:WS-Discovery 发现、SOAP 端点与多 Profile、PTZ 变焦与能力区分、对讲回传 backchannel、RTSP TCP interleaved 服务端、SDP 多轨协商、H.264/AAC/G.711 打包与时间戳规则、ffmpeg 跨平台设备采集、屏幕推流、子进程托管与录像分段、私有协议适配、端口漂移与嵌入架构、ONVIF 设备网关代理、按需推流+MediaMTX/WHEP 分发与 Web 播放端(WHEP/MSE),及乱码/饿死/乱序/灰色画面等实测陷阱。跨平台(Go/Java/ArkTS/TS 通用)。
-whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、发现工具)与 RTSP 推拉流(服务端、拉流客户端、对讲回传),实现 ffmpeg 设备采集、屏幕推流、拉流转推或录像分段上传,搭建按需推流+MediaMTX/WHEP 视频分发或 Web 端 WHEP/MSE 播放器,用 gRPC/HTTP 网关代理 ONVIF 相机,适配私有云台协议,排查设备发现不到、Profile/取流地址错误、PTZ 不工作、拉流花屏/变速/丢包告警、ffmpeg 报错只剩退出码、录像中断整段报废、浏览器看不了推流、WHEP 首连 404、屏幕采集灰色、设备枚举为空、SOAP 应答乱码等问题时使用。
+description: ONVIF 与 RTSP/RTP 音视频流开发方法论:WS-Discovery 发现、SOAP 端点与多 Profile、PTZ 变焦与能力区分、对讲回传 backchannel、RTSP TCP interleaved 服务端、SDP 多轨协商、H.264/AAC/G.711 打包与时间戳规则、ffmpeg 跨平台设备采集、屏幕推流、子进程托管与录像分段、私有协议适配、端口漂移与嵌入架构、ONVIF 设备网关代理、按需推流+MediaMTX/WHEP 分发与 Web 播放端(WHEP/MSE)、ONVIF/RTSP 认证(WS-UsernameToken Digest、RTSP Digest、对时与免认证白名单),及乱码/饿死/乱序/灰色画面等实测陷阱。跨平台(Go/Java/ArkTS/TS 通用)。
+whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、发现工具)与 RTSP 推拉流(服务端、拉流客户端、对讲回传),实现 ffmpeg 设备采集、屏幕推流、拉流转推或录像分段上传,搭建按需推流+MediaMTX/WHEP 视频分发或 Web 端 WHEP/MSE 播放器,用 gRPC/HTTP 网关代理 ONVIF 相机,适配私有云台协议,为设备或客户端增加认证(WS-Security UsernameToken、RTSP Digest、HTTP Basic),排查设备发现不到、Profile/取流地址错误、PTZ 不工作、拉流花屏/变速/丢包告警、ffmpeg 报错只剩退出码、录像中断整段报废、浏览器看不了推流、WHEP 首连 404、屏幕采集灰色、设备枚举为空、SOAP 应答乱码、认证 401/重放/时间窗等问题时使用。
 ---
 
 # ONVIF 与 RTSP/RTP 音视频流开发方法论
@@ -193,3 +193,44 @@ whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、
 - **gRPC metadata 注在 per-call context**:注在 dial context 不会随单次调用传递(通用做法:unary+stream interceptor 每次调用统一注入);连接参数(endpoint/端口/凭据)随调用透传
 - 注册表同步的字段白名单要覆盖下游消费字段(曾剥掉 onvif_port 导致下游拿不到连接参数)
 - 成像设置"确保"类操作 read-before-write:先 GetImagingSettings 比对、只写偏离项(按字段 merge,UNSPECIFIED 不碰)+TTL 缓存(如 10min)+失败降级(用相机当前设置继续拍),不要每次请求都写设备
+
+## 21. 认证(ONVIF UsernameToken / RTSP Digest)
+
+一套账号同时服务三协议(SOAP/RTSP/HTTP),客户端一处填凭证三处生效;设备端默认关闭、界面可配(向后兼容,升级不断流)。
+
+### ONVIF:WS-Security UsernameToken(消息级)
+
+- **位置必须是 SOAP 信封内 `<s:Header><wsse:Security s:mustUnderstand="1">`**——放 `X-WSSE` HTTP 头是非标写法,合规设备不认;正确形态见 OASIS UsernameToken Profile 1.0
+- 摘要公式:`digest = Base64(SHA1(nonce 原始字节 + Created + 口令))`;Nonce 为 Base64 随机数(**必须每次随机**,固定 nonce 等于可重放),Created 为 UTC ISO8601
+- 服务端校验:重算摘要比对 + **Created ±5 分钟时间窗**(重放的主要时间界)+ 用户名匹配;同时兼容 PasswordText(弱客户端)
+- **pre-auth 白名单**:`GetSystemDateAndTime`(对时前置,免认证是硬要求)/`GetCapabilities`/`GetServices` 放行,其余(GetProfiles/GetStreamUri/GetSnapshotUri/GetDeviceInformation/PTZ)要求认证
+- 未授权应答:HTTP 401(空 body)是设备惯例;SOAP 层标准错误是 `env:Sender` + `ter:NotAuthorized`
+- **对时闭环**:客户端首次带认证调用前,免认证调 GetSystemDateAndTime 算设备钟偏移,套进 Created——手机/摄像头时钟漂移是 digest 被拒的头号原因;服务端对时请求不要误拦
+- WS-Discovery 发现(Probe/Hello)不设防,发现层与认证层解耦
+
+### RTSP:HTTP Digest(RFC 2617 复用)
+
+- 挑战流程:DESCRIBE 无凭证 → `401` + `WWW-Authenticate: Digest realm="...", nonce="<随机>", algorithm=MD5`(可同时通告 Basic)→ 客户端带 `Authorization: Digest ... response=MD5(HA1:nonce:HA2)` 重发;HA1=MD5(user:realm:pass),HA2=MD5(method:uri)
+- **无 qop 的 RFC 2617 兼容形态**是 IP 摄像机事实标准;算法只做 MD5 即可(ffmpeg/VLC/gortsplib 全支持)
+- `OPTIONS` 放行(客户端能力探测);nonce 按连接签发缓存,应答带的 nonce 与签发不符即重挑战;HA2 的 uri 取 Authorization 头内 uri 字段(与客户端计算口径一致,规避 SETUP 轨道地址写法差异)
+- **URL userinfo 惯例**:`rtsp://user:pass@host/path`,特殊字符百分号转义——gortsplib(收到 401 自动凭 userinfo 重试 Basic/Digest)、ffmpeg/VLC 零代码支持;服务端取流地址(GetStreamUri 返回值)本身不含凭证,由客户端注入
+- HTTP 侧(快照/状态页/MJPEG)用 Basic 即可,浏览器原生弹登录框
+
+### 实现要点
+
+- 摘要计算:DIGEST 服务端必须有明文口令参与哈希(MD5(user:realm:pass)),**无法只存哈希**;口令明文存应用私有沙箱可接受,不入库不外发
+- 账号口令比对用逐字节异或不短路(近似恒时);ArkTS 用 cryptoFramework `createMd('MD5'/'SHA1')` + util.Base64Helper
+- 客户端凭证注入三处:SOAP Header(UsernameToken)/RTSP URL userinfo/HTTP 请求 SetBasicAuth;设备 401 且无凭证时给明确提示「设备要求认证,请填写用户名密码」而非裸错误码
+- 跨端联调:onvif-ai(客户端)↔ ohos-ipcam-streamer(设备端)同账号打通;服务端设备时间窗测试务必覆盖「设备钟快/慢 6 分钟」场景
+
+### 认证相关陷阱
+
+| 现象 | 根因 |
+|---|---|
+| 合规设备拒绝旧版 onvif-ai 认证 | X-WSSE HTTP 头非标,须放 SOAP Header |
+| 认证报文可重放 | nonce 固定(byte(i*7+3) 这类确定性生成) |
+| 凭证正确仍 401 | 设备钟偏差超时间窗,未先 GetSystemDateAndTime 对时 |
+| 设备信息接口从未成功 | SOAP 端点误用 ONVIF 命名空间 URL(应发往设备自身地址) |
+| RTSP 401 后客户端不重试 | URL 未注入 userinfo(gortsplib/ffmpeg 凭 userinfo 自动重试) |
+| 对时请求也被 401 | 服务端把 GetSystemDateAndTime 放进了认证范围(应在白名单) |
+| Digest 校验时好时坏 | HA2 的 uri 与客户端计算口径不一致(应取 Authorization 头内 uri) |
