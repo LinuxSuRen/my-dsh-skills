@@ -1,6 +1,6 @@
 ---
 name: android-camera-dev
-description: 安卓相机采集与推流开发方法论：Camera2 多摄并发限制与降级、JPEG 直出/YUV 回退、DRI 重启标记归一化、JPEG_ORIENTATION 方向跟随、相机被驱逐自愈、HAL 卡死防护、资源战 dumpsys 分析。真机实测（小米电视/工控板/OPPO/联想 Android 16 四类设备）。
+description: 安卓相机采集与推流开发方法论：Camera2 多摄并发限制与降级、JPEG 直出/YUV 回退、DRI 重启标记归一化、JPEG_ORIENTATION 方向跟随、相机被驱逐自愈、HAL 卡死防护、资源战 dumpsys 分析、拍照产物元数据无损嵌入（EXIF/XMP）。真机实测（小米电视/工控板/OPPO/联想 Android 16 四类设备）。
 whenToUse: 开发安卓摄像头采集、MJPEG/RTSP/ONVIF 推流类应用（Camera2 API），排查绿屏/花屏、画面方向不对、多摄开不了、相机被系统或特权应用抢占、HAL 卡死 ANR、息屏断流等问题时使用。
 ---
 
@@ -45,3 +45,8 @@ adb shell dumpsys dropbox --print data_app_anr
 
 - **JPEG 结构解剖是花屏/绿屏定位第一步**（python 遍历 marker）：SOF 尺寸与采样因子、有无 DRI、DHT 表数——对比好帧/坏帧的段差异直接锁定根因
 - 像素级验证：解码后采样统计绿像素占比（G>90 且 G>1.5×max(R,B)），比肉眼客观
+
+## 6. 拍照产物元数据无损嵌入
+
+- JPEG 走 EXIF APP1（ImageDescription）+ XMP APP1 双通道，已存在的段一律不动；两槽都被相机占用时降级写 COM 段；PNG 用 eXIf chunk + IHDR 后的 tEXt
+- **元数据缺失绝不能让拍照失败**：任何不支持/畸形输入都返回原图不报错——元数据是增强项不是依赖项，采集链路对它零容忍度反过来（元数据写入失败 ≠ 拍照失败）
