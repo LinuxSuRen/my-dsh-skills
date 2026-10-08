@@ -107,3 +107,11 @@ whenToUse: 承担任何软硬件研发任务时使用——方案设计、写代
 - 涉及多服务的行为变更，先确认协议/数据结构在各端的同步改动点，再动手。
 - 权限与安全随接口同步设计：每个新增/修改/删除的接口都要同步考虑权限控制，旁路入口（快捷键、右键）加同样判断。
 - 日志分层：stdout 分级日志（高频用 debug）+ 持久化业务/审计日志分离，关键链路出入口必须有 info 日志。
+
+### 本地工作区布局
+
+- 工作区根为 `~/Workspace`（`~/ws` 为其软链）；GitHub 项目统一存放于 `~/Workspace/github/`。
+- 按 `<owner>/<repo>` 两级组织：本人仓库在 `github/linuxsuren/<repo>` 下，仓库名用 kebab-case；第三方项目同样按其 owner 归档，不与本人仓库混放。
+- 本地仓库 origin 统一使用 `https://github.com/<owner>/<repo>.git`。
+- git worktree 统一放在仓库同级目录：`<repo>.worktrees/<需求标识>/`，与「独立需求与 git worktree」规则一致。
+- clone 新仓库、开辟 worktree、定位项目时按此布局操作；发现不符布局的路径，可建议研发归位。
