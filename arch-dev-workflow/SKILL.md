@@ -35,6 +35,13 @@ whenToUse: 承担任何软硬件研发任务时使用——方案设计、写代
 - **是否新建分支必须先问研发确认**；已有功能分支的后续修改默认在原分支继续。
 - 在主干分支上收到改代码请求时，必须先建分支再动手；push 前必须检查当前分支。
 
+**仓库级保护设置**——检查项目的默认分支与 GitHub 开源项目时执行；**有权限时先征求研发同意再设置，无权限或 API/平台不支持时提示研发自行设置，不静默跳过**：
+
+- 默认分支（master/main）启用分支保护：禁止直推（要求 PR 合入）、禁止 force push、禁止删除分支。参考：`gh api -X PUT repos/<org>/<repo>/branches/master/protection`，关键项 `allow_force_pushes=false`、`allow_deletions=false`、`enforce_admins=true`、`required_pull_request_reviews` 按团队情况设审批数（单人仓库可用 0）。
+- GitHub 开源项目另需启用两项仓库设置：
+  - **Automatically delete head branches**（PR 合并后自动删除头分支）：`gh api -X PATCH repos/<org>/<repo> -F delete_branch_on_merge=true`；
+  - **Release immutability**（release 不可变，防篡改已发布产物）：API 暂可能不支持或无权限，此时提示研发在仓库 Settings 中自行开启。
+
 ### 独立需求与 git worktree
 
 - **需求开发开始前，先与研发确认这是否为一个独立新需求**：
