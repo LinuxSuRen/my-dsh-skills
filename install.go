@@ -68,13 +68,16 @@ func copySkill(fsys fs.FS, name, dst string) error {
 		if err != nil {
 			return err
 		}
-		defer data.Close()
+		defer func() { _ = data.Close() }()
 		out, err := os.OpenFile(target, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o644)
 		if err != nil {
 			return err
 		}
-		defer out.Close()
-		_, err = io.Copy(out, data)
-		return err
+		_, copyErr := io.Copy(out, data)
+		closeErr := out.Close()
+		if copyErr != nil {
+			return copyErr
+		}
+		return closeErr
 	})
 }
