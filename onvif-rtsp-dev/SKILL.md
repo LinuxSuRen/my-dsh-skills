@@ -1,7 +1,7 @@
 ---
 name: onvif-rtsp-dev
-description: ONVIF 与 RTSP/RTP 音视频流开发方法论:WS-Discovery 发现、SOAP 端点与多 Profile、PTZ 变焦与能力区分、对讲回传 backchannel、RTSP TCP interleaved 服务端、SDP 多轨协商、H.264/AAC/G.711 打包与时间戳规则,及乱码/饿死/乱序等实测陷阱。跨平台(Go/Java/ArkTS 通用)。
-whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、发现工具)与 RTSP 推拉流(服务端、拉流客户端、对讲回传),排查设备发现不到、Profile/取流地址错误、PTZ 不工作、拉流花屏/变速/丢包告警、SOAP 应答乱码等问题时使用。
+description: ONVIF 与 RTSP/RTP 音视频流开发方法论:WS-Discovery 发现、SOAP 端点与多 Profile、PTZ 变焦与能力区分、对讲回传 backchannel、RTSP TCP interleaved 服务端、SDP 多轨协商、H.264/AAC/G.711 打包与时间戳规则、ffmpeg 跨平台设备采集与屏幕推流、私有协议适配、端口漂移与嵌入架构,及乱码/饿死/乱序/灰色画面等实测陷阱。跨平台(Go/Java/ArkTS 通用)。
+whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、发现工具)与 RTSP 推拉流(服务端、拉流客户端、对讲回传),实现 ffmpeg 跨平台设备采集或屏幕推流,适配私有云台协议,排查设备发现不到、Profile/取流地址错误、PTZ 不工作、拉流花屏/变速/丢包告警、屏幕采集灰色、设备枚举为空、SOAP 应答乱码等问题时使用。
 ---
 
 # ONVIF 与 RTSP/RTP 音视频流开发方法论
@@ -89,3 +89,41 @@ whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、
 | AAC 解码噪声 | AU-headers-length 缺失或 ASC 错 |
 | OpenCV 拉不到流 | 默认 UDP,应回 461 引导 TCP |
 | 应答空响应 | 响应未 flush 就 close |
+| macOS 屏幕采集灰色/挂起 | 未签名 ffmpeg 无权限,avfoundation 静默拒绝(改用 screencapture 管道) |
+| Windows 枚举为空(FFmpeg 7.1+) | dshow 输出格式变更,旧解析器靠分节标题失明(需双格式兼容) |
+| 快照失败(设备被占) | 取流进程独占设备,快照需从 RTSP 流拉帧而非直连 |
+| 私有协议命令无效 | 缺校验和/速度编码错误(带符号补码 vs 无符号)/角度编码位数错误 |
+| 管道推流 pipe EOF | StdoutPipe 与 cmd.Run 竞态(改用 os.Pipe + defer 清理) |
+| 屏幕推流帧率极低 | Retina 全分辨率 PNG 3MB/帧管道拥塞(需 scale 缩小) |
+| 端口漂移后客户端连不上 | 宣告地址未跟随实际端口(GetStreamUri/UI/Discovery 全部用实际端口) |
+| Go 路由注册 panic | ServeMux 方法限定模式与全方法模式路径重叠(GET / vs /onvif/) |
+
+## 11. ffmpeg 跨平台设备采集
+
+- **设备枚举按平台分发**:Linux 扫 `/dev/video*`+sysfs(名称/连接方式/过滤 UVC 元数据节点 index!=0);macOS/Windows 解析 `ffmpeg -list_devices`
+- **FFmpeg 7.1+ 统一设备列表**:dshow 不再打印分节标题,改为每行末尾 `(video)`/`(video, audio)`/`(audio)` 媒体类型标记——解析器必须**双格式兼容**(旧格式靠分节,新格式靠行尾括号组);正则限定小写媒体类型词,设备名含括号不会误判
+- **macOS avfoundation**:新版在设备名后追加 `[uid:...] [serial:...]`,需剥离;`Capture screen N` 是屏幕设备,非摄像头
+- **设备独占访问**:Windows(dshow)/Linux(v4l2) 采集设备通常只能被一个进程打开——取流进程持有设备时,**快照必须从 RTSP 流拉帧**(不能二次直连设备);macOS 允许多进程并发访问摄像头
+- **私有协议适配(以 Skydroid TP 为例)**:命令末尾追加 2 位十六进制累加校验(整条含 `#` 的 ASCII 求和低 8 位);速度为带符号补码 ±100(0x64=+100 右/上,0x9C=-100 左/下);角度为 16 位补码 `%04X`(值=角度×100,范围 ±90°);UDP 通道无 ACK 需 3 次重发;姿态回报帧 `#tpUG2rGAC<yaw><pitch><roll>`(各 4 位 hex,÷100)
+
+## 12. 屏幕采集推流
+
+- **macOS 权限陷阱**:未签名 ffmpeg 的 avfoundation 屏幕采集被 macOS **静默拒绝**——不弹权限框,返回灰色帧或挂起(screencapture 系统命令可正常采集验证)
+- **macOS 替代方案**:`screencapture -x -t png /tmp/frame.png` 循环 + `cat` 到管道 + ffmpeg `-f image2pipe -i pipe:` 读取,完全绕开签名权限
+- Retina 全分辨率 PNG 每帧 ~3MB,管道吞吐不足——输出端加 `-vf scale=1280:-2` 降分辨率保帧率;macOS 屏幕源**不加 `-nostdin`**(需从 stdin 管道读帧)
+- Go 管道连接用 `os.Pipe()` 而非 `StdoutPipe`(后者与 `cmd.Run` 的 Wait 竞态导致 pipe 过早关闭 → EOF)
+- Linux 屏幕采集用 `-f x11grab -i :0.0`(一屏一 X display);Windows 用 `-f gdigrab -i desktop`
+
+## 13. 嵌入式 RTSP 服务与端口漂移
+
+- **内嵌 RTSP 服务器**(gortsplib 等):Publisher(ANNOUNCE/RECORD) → ServerStream → 多 Reader(DESCRIBE/PLAY) 分发;读者在发布者未就绪时**等待**(默认 5s,而非立刻 404);发布者断开自动释放路径,新发布者可踢旧接管
+- **端口漂移**:HTTP/RTSP 端口被占时自动向后尝试(EADDRINUSE → next port,最多 20 个);**对外宣告的地址必须用实际端口**(GetStreamUri/GetSnapshotUri/WS-Discovery XAddr/UI 展示全部跟随),漂移结果不写配置,下次启动仍从首选端口探测
+- UDP 传输端口(RTP 8000/RTCP 8001)被占时降级为仅 TCP 模式,不影响拉流
+- Go 1.22+ ServeMux 模式冲突:`GET /`(方法限定+更宽路径)与 `/onvif/`(全方法+更窄路径)不能共存——根路由去掉方法前缀
+
+## 14. 快照与 PTZ 架构
+
+- **快照优先走流**:启用中的摄像头从 RTSP 服务拉帧(避免二次独占打开设备);失败回退直连;禁用摄像头直接直连;短 TTL 缓存(3s)防进程风暴
+- **PTZ mock 架构**:无硬件时用虚拟状态机(绝对命令记录 + 连续移动按速度虚拟积分,满速 90°/s yaw/45°/s pitch);有姿态回报(Skydroid GAC)则用真实角度替代估算
+- **焦距(Focus)属 Imaging 服务而非 PTZ**:GetOptions 声明 AutoFocusMode/DefaultSpeed/NearLimit/FarLimit;GetMoveOptions 返回 Absolute/Relative/Continuous 各自范围;Move 操作支持三种模式;PTZ GetServiceCapabilities 用 `Zoom="true"` 属性声明
+- 预置位实现:自定义位存本地角度回放;内建位(回中/垂直向下/Follow/Lock/FPV 模式)直接发硬件命令
