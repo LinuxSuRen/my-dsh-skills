@@ -10,7 +10,7 @@ import (
 // Skill directories at the repository root. A new skill must be added
 // to this list to get embedded into the binary.
 //
-//go:embed arch-dev-workflow branching-workflow frontend-dev-workflow git-identity open-source-contribution skill-refresh
+//go:embed arch-dev-workflow branching-workflow frontend-dev-workflow git-identity open-source-contribution skill-distillation skill-refresh
 var fsys embed.FS
 
 // FS returns the read-only filesystem with all embedded skills.
