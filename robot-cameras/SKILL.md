@@ -1,6 +1,6 @@
 ---
 name: robot-cameras
-description: 机器人（机器狗等）摄像头 RTSP 取流地址速查与探测方法：智身科技 M1 前后本体摄像头、宇泛灵猫 Cyvet 通道流、宇树 Go 系列机载网络等。
+description: 机器人（机器狗等）与网络摄像机（IPC）RTSP 取流地址速查与探测方法：智身科技 M1、宇泛灵猫 Cyvet、海康/大华/宇视等品牌格式、宇树 Go 系列机载网络等。
 whenToUse: 为机器人/机器狗设备做视频取流、录像、推流开发或联调时使用；接入新型号摄像头时按探测流程验证并补充本技能。
 ---
 
@@ -20,6 +20,25 @@ whenToUse: 为机器人/机器狗设备做视频取流、录像、推流开发�
 按通道号取流，`stream=0` 为主码流，设备 IP 视部署而定：
 
 - `rtsp://<设备IP>:554/live?channel=<通道号>&stream=0`
+
+## 网络摄像机（IPC）品牌 RTSP 格式
+
+### 海康威视 Hikvision（robot-platform 实测）
+
+- 新平台 IPC/NVR：`rtsp://<user>:<pass>@<ip>:554/Streaming/Channels/<通道ID>`，**通道ID = 通道号×10 + 码流号**（101=通道1主码流、102=通道1子码流、201=通道2主码流）；
+- 经典旧格式 IPC：`rtsp://<ip>:554/h264/ch1/main/av_stream`；
+- robot-platform 实测：录像任务包使用 `/Streaming/Channels/102`（通道1子码流，经本地隧道转发）。
+
+### 大华 Dahua（公开资料，平台 proto 中有厂商提及）
+
+- `rtsp://<user>:<pass>@<ip>:554/cam/realmonitor?channel=<通道号>&subtype=<0主|1子>`
+
+### 其他常见品牌（公开资料，未实测）
+
+- 宇视 Uniview：`rtsp://<ip>:554/media/video1`（主）、`/media/video2`（子）；
+- 水星 Mercury / TP-LINK：`rtsp://<user>:<pass>@<ip>:554/stream1`（主）、`/stream2`（子）；
+- 雄迈 Xiongmai（XM）：`rtsp://<ip>:554/user=admin&password=&channel=1&stream=0.sdp?real_stream`；部分设备需在网络设置中关闭再重开 RTSP 才生效；
+- 通用 ONVIF 设备：优先走 WS-Discovery + GetStreamUri 动态取流（robot-platform 的 `ResolveCameraRTSP` 即此模式，按 通道/码流 参数适配多厂商）。
 
 ## 网络资料（未实测，以官方文档为准）
 
