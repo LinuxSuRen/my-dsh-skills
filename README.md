@@ -20,6 +20,7 @@
 | [`async-job-sse-upload-dev`](async-job-sse-upload-dev/SKILL.md) | Web 长任务与大文件传输方法论（Go 后端+浏览器前端）：202+job_id 异步任务框架、SSE 进度流（X-Accel-Buffering/双清理语义）、统一分片上传引擎（WriteAt 直写峰值磁盘 1×）与客户端（重试先对账/流式 SHA-256）、GB 级下载禁 fetch→blob、nginx/BFF 代理与容器文件替换陷阱。 |
 | [`skill-refresh`](skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
 | [`skill-distillation`](skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
+| [`robot-cameras`](robot-cameras/SKILL.md) | 机器人（机器狗等）摄像头 RTSP 取流速查与探测：智身科技 M1 前后本体摄像头、宇泛灵猫 Cyvet 通道流、宇树 Go 系列机载网络；含新型号 ffprobe/ffplay 探测接入流程。 |
 
 ## 通过 CLI 安装（askills）
 
