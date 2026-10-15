@@ -24,6 +24,7 @@
 | [`installer-bundle-design`](installer-bundle-design/SKILL.md) | 安装包设计方法论：清单驱动（manifest 自描述、字段只增不改）、单一产物与编排收敛/按 profile 裁剪、白名单自动收集编排引用、在线/离线双模同源版本语义、对外端口全参数化。适用于任何打包→目标机安装类交付工具。 |
 | [`installer-target-execution`](installer-target-execution/SKILL.md) | 目标机执行层方法论：执行通道抽象（Run/Upload/Platform）、提权矩阵（root/sudo -n/sudo -S/docker 组，stdin 凭据安全与双行喂入）、SFTP/md5 增量传输、重装幂等、docker 组授权语义、Linux/macOS/Windows 三平台适配清单。 |
 | [`installer-preflight`](installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
+| [`user-facing-errors`](user-facing-errors/SKILL.md) | 用户可见错误规范：最终用户只看到稳定错误码+普通人能读懂的提示，技术根因只进日志，绝不进对用户的响应。 |
 
 ## 通过 CLI 安装（askills）
 
