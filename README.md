@@ -19,6 +19,8 @@
 | [`edge-offline-pipeline-dev`](edge-offline-pipeline-dev/SKILL.md) | 边缘设备弱网数据管道开发方法论（Go）：目录即队列的崩溃安全磁盘重试队列（rename 原子状态机/文件名编码重试时间/边写边算 sha256/双重限额）、录像分段录制→remux→幂等上传、弱网事件上报不阻塞任务、离线 SQLite 任务队列、告警边沿触发。 |
 | [`async-job-sse-upload-dev`](async-job-sse-upload-dev/SKILL.md) | Web 长任务与大文件传输方法论（Go 后端+浏览器前端）：202+job_id 异步任务框架、SSE 进度流（X-Accel-Buffering/双清理语义）、统一分片上传引擎（WriteAt 直写峰值磁盘 1×）与客户端（重试先对账/流式 SHA-256）、GB 级下载禁 fetch→blob、nginx/BFF 代理与容器文件替换陷阱。 |
 | [`skill-refresh`](skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
+| [`subagent-parallel-dev`](subagent-parallel-dev/SKILL.md) | 多子代理并行开发大型跨仓库任务：契约先行、早期契约审查、独立复测纪律（实跑复核+stash/纯净worktree对照证实既有失败）、真实服务E2E兜底、有进展才提交。提炼自 6 仓库 7 子代理实战。 |
+| [`redis-stream-rpc`](redis-stream-rpc/SKILL.md) | Redis Streams 版 RPC 总线：注册/心跳/命令/回执流布局、entry 双编码、幂等键、PEL 回收(XAUTOCLAIM)、权重优先窗口仲裁、令牌随流下发与恢复重派。与 mqtt-device-gateway-dev 互补。 |
 | [`skill-distillation`](skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
 | [`robot-cameras`](robot-cameras/SKILL.md) | 机器人（机器狗等）与网络摄像机（IPC）RTSP 取流速查与探测：智身科技 M1、宇泛灵猫 Cyvet、海康（实测通道ID规则）/大华/宇视/水星/TP-LINK/雄迈品牌格式、宇树 Go 系列机载网络；含新型号 ffprobe/ffplay 探测接入流程。 |
 
