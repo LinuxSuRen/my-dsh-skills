@@ -234,3 +234,38 @@ whenToUse: 开发或调试 ONVIF 设备端/客户端(摄像头、NVR、网关、
 | RTSP 401 后客户端不重试 | URL 未注入 userinfo(gortsplib/ffmpeg 凭 userinfo 自动重试) |
 | 对时请求也被 401 | 服务端把 GetSystemDateAndTime 放进了认证范围(应在白名单) |
 | Digest 校验时好时坏 | HA2 的 uri 与客户端计算口径不一致(应取 Authorization 头内 uri) |
+
+## 22. Event 事件服务(PullPoint 模型)
+
+把设备状态变化(信号丢失/移动侦测/安全/电源)推给 NVR/家庭自动化的标准入口;无 Event 能力的设备在联动生态里是哑巴。
+
+### 模型取舍
+
+- **PullPoint(客户端轮询)是嵌入式首选**:客户端向订阅地址反复 PullMessages,服务端无需向客户端回连 HTTP——Basic Notification(Notify 回调)要求客户端提供 HTTP 端点,穿 NAT/实现成本都高;Notification Broker 是聚合代理形态,设备端不用
+- 订阅地址必须独立可路由(`http://ip:port/onvif/sub_N`),客户端把 PullMessages 发到该地址——在单一 SOAP 端点上按请求行路径分发即可,不必真的开新端口
+
+### 实现要点(实测验证)
+
+- `CreatePullPointSubscription` 应答带 `wsa:Address`(订阅地址)+`wsnt:CurrentTime/TerminationTime`;`GetEventProperties` 应答 TopicSet——客户端靠它发现支持的话题
+- **PullMessages 阻塞语义**:有消息立即回,无消息等到 Timeout 再回(空消息列表);**pull 会把订阅 TTL 顺延到「请求到达时刻+Timeout」**(规范要求,客户端只 pull 不 renew 也不断线);Renew/Unsubscribe 补齐生命周期
+- TopicSet 格式:嵌套 `wstop:` 元素,叶子带 `wstop:topic="true"`;**标准话题用 tns1**(VideoSource/SignalLoss、RuleEngine/CellMotion/Motion 直接进 NVR 生态),自定义话题走自有命名空间(如 `lns:`),别挤占 tns1
+- 应答信封需声明全部前缀:tev/wsa/wsnt/wstop + 话题命名空间 tns1/lns(ConcreteSet 方言的 topic 字符串依赖前缀绑定)
+- **订阅端点同样要过认证**(开启认证时)——事件订阅是安全旁路的高发点;客户端每次请求须重新生成 UsernameToken(Created 时间窗)
+
+### 事件源工程模式
+
+- **状态翻转才发布+滞回保持**(运动检测:超阈值开/低于阈值保持 2s 才关),配合限频(同 topic+source 2s 内合并)双保险防抖动刷屏
+- 无人订阅不缓存历史(新订阅不补发,避免风暴);每订阅环形队列(100 条)溢出丢最旧
+- 信号丢失(SignalLoss)挂相机注册/反注册钩子——天然覆盖驱逐/HAL 卡死/管线重启全部路径;Source 用 `Camera_N`
+- 轻量移动侦测:JPEG inSampleSize=8 降采样(720p→160x90)+网格平均亮度差分,4fps 抽样单帧毫秒级,工作线程独立+最新帧覆盖式槽位(处理不过来丢旧帧,绝不阻塞采集)
+- 电池/温度事件是手机/pad 相机的差异化卖点(sticky ACTION_BATTERY_CHANGED 免 receiver 直读);仅在状态切换(充电切换/跨低电量阈值/跨温度阈值)时发布,载荷带 Level/Status/Temp/Voltage
+
+### Event 相关陷阱
+
+| 现象 | 根因 |
+|---|---|
+| 订阅创建成功但 Pull 401 | 订阅端点没走认证校验,或客户端复用了过期的 UsernameToken |
+| 客户端不显示话题 | GetEventProperties 缺 TopicSet,或叶子没带 `wstop:topic="true"` |
+| 拉取总是立即空返回 | PullMessages 没实现阻塞等待(直接返回空),规范要求等到 Timeout |
+| 事件淹没队列 | 高频源(认证失败/信号抖动)没限频,单订阅缓冲溢出连环丢 |
+| 话题不互通 | 自定义话题挤占了 tns1 命名空间(互操作圈不认) |
