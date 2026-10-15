@@ -23,6 +23,7 @@ adb connect <ip>:<连接端口>  # 配对端口与连接端口是两个不同端
 - adb 31.0.2 起支持 pair 与 mdns；配对码有时效，出现即立刻配
 - 重启 adb server（kill-server）会丢掉已连的 TCP transport，需要重连
 - 5555 端口（经典 adb tcpip）与无线调试端口并存时，无线调试挂了先试 5555
+- **USB 授权过的设备免配对直连**：`adb mdns services` 发现 `_adb-tls-connect._tcp` 端口后 `adb connect` 直接可用（USB RSA 密钥沿用到无线调试）——设备挪离 USB 后的标准接管路径
 
 ## 2. 设备识别陷阱
 
@@ -32,6 +33,9 @@ adb connect <ip>:<连接端口>  # 配对端口与连接端口是两个不同端
 | HarmonyOS NEXT（纯血鸿蒙 5.x） | 不支持安卓 APK，hdc 只装 HAP | 提前问清系统版本，别浪费时间 |
 | OPPO force-stop 后 `am start` 报 `Cannot make calls to a recycled instance` | ColorOS 内部 bug | 用 `monkey -p <pkg> -c android.intent.category.LAUNCHER 1` 启动 |
 | OPPO `pm grant` 报无 GRANT_RUNTIME_PERMISSIONS / `cmd appops` 报无 MANAGE_APP_OPS_MODES | ROM 限制 shell 权限 | 界面内弹窗授权，或换思路 |
+| 联想重启后应用未自启、receiver 未执行 | ZUI `ZuiAutoRunManager: isAllowStart not allow start` 拦截旁路安装应用的开机广播 | 用户在系统设置手动开「自启动」（MIUI 同类）；验证用 `am broadcast -a android.intent.action.QUICKBOOT_POWERON`（非保护广播可模拟风暴） |
+| Android 16 后台拉起的服务打不开相机 | 后台 FGS 相机禁令：`Foreground service started from background can not have location/camera/microphone access`，targetSdk 24 legacy 不豁免 while-in-use 限制 | 「无 UI 自启+相机」链路在该版本不可达，需一次前台启动过渡；定位：logcat 搜 `Background started FGS` |
+| 服务反复重启后主线程 FATAL `schedule() called more than 250 times` | JobScheduler 250 次/60s 限流——每轮 onStartCommand 都 cancel+schedule 烧穿配额，异常直接炸主线程 | job 调度包 `try-catch (IllegalStateException)` 静默降级 + 应用内 5s 节流；风暴复现：杀进程后 1s 连发 12 条广播 |
 
 ## 3. ROM 后台强杀与对抗
 
