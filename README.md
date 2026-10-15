@@ -9,7 +9,7 @@
 | [`arch-dev-workflow`](arch-dev-workflow/SKILL.md) | 软硬件架构师通用工程方法论：方案先行与最小实现、Git 纪律、验证策略、接口与标识符设计原则、跨端契约与展示分离。适用于任何技术栈的研发任务。 |
 | [`frontend-dev-workflow`](frontend-dev-workflow/SKILL.md) | Rick 的前端研发品味：Vue 3 + Vite 默认、按需上 TS/React、Element Plus 与手写设计令牌双轨、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源前端项目（open-pdf、onvif-ai、smart-chat 等）。 |
 | [`git-identity`](git-identity/SKILL.md) | 提交代码必须使用 Rick 本人的 Git 身份（user.name=Rick, email=linuxsuren@users.noreply.github.com），禁止使用 agent/占位身份提交。 |
-| [`branching-workflow`](branching-workflow/SKILL.md) | 每次提交/推送前必须先询问研发：新建分支还是当前分支、走 PR 还是直推；不得擅自决定分支策略。 |
+| [`branching-workflow`](branching-workflow/SKILL.md) | 每次提交/推送前必须先询问研发：新建分支还是当前分支、走 PR 还是直推；不得擅自决定分支策略。agent 只负责 review PR 并加 comment（建议定期/自动化 review），合并由人工执行或收到明确指令。 |
 | [`open-source-contribution`](open-source-contribution/SKILL.md) | 开源贡献规范：Issue/PR 提交要求、Review 礼仪、good-first-issue 模板、开源文档写作、仓库门面（About/README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。提炼自 [open-source-best-practice](https://github.com/LinuxSuRen/open-source-best-practice)。 |
 | [`android-device-debugging`](android-device-debugging/SKILL.md) | 安卓真机联调方法论：adb 无线调试配对、各厂商 ROM 陷阱（OPPO 冻结器与授权限制、华为 HDC、定制板 app-idle 强停）、相机资源战日志分析、ANR 定位、USB 隧道隔离网络故障、Android CI 构建静默失败根因清单。提炼自 tv-uvc-streamer 多设备实战（小米电视/工控板/OPPO/联想 Android 16）。 |
 | [`onvif-rtsp-dev`](onvif-rtsp-dev/SKILL.md) | ONVIF 与 RTSP/RTP 音视频流开发方法论：WS-Discovery、SOAP 多 Profile、PTZ、对讲回传、TCP interleaved、SDP 多轨协商、H.264/AAC/G.711/JPEG(RFC 2435) 打包、ffmpeg 跨平台采集、子进程托管与录像分段、私有协议适配、ONVIF 设备网关代理、按需推流+MediaMTX/WHEP 分发与 Web 播放端（WHEP/MSE）实测陷阱。跨平台（Go/Java/ArkTS/TS 通用）。 |
@@ -21,6 +21,9 @@
 | [`skill-refresh`](skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
 | [`skill-distillation`](skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
 | [`robot-cameras`](robot-cameras/SKILL.md) | 机器人（机器狗等）与网络摄像机（IPC）RTSP 取流速查与探测：智身科技 M1、宇泛灵猫 Cyvet、海康（实测通道ID规则）/大华/宇视/水星/TP-LINK/雄迈品牌格式、宇树 Go 系列机载网络；含新型号 ffprobe/ffplay 探测接入流程。 |
+| [`installer-bundle-design`](installer-bundle-design/SKILL.md) | 安装包设计方法论：清单驱动（manifest 自描述、字段只增不改）、单一产物与编排收敛/按 profile 裁剪、白名单自动收集编排引用、在线/离线双模同源版本语义、对外端口全参数化。适用于任何打包→目标机安装类交付工具。 |
+| [`installer-target-execution`](installer-target-execution/SKILL.md) | 目标机执行层方法论：执行通道抽象（Run/Upload/Platform）、提权矩阵（root/sudo -n/sudo -S/docker 组，stdin 凭据安全与双行喂入）、SFTP/md5 增量传输、重装幂等、docker 组授权语义、Linux/macOS/Windows 三平台适配清单。 |
+| [`installer-preflight`](installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
 | [`ui-responsive-list`](ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）与表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）。提炼自多套管理端 Web 列表页改造实战。 |
 
 ## 通过 CLI 安装（askills）
