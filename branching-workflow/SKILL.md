@@ -30,6 +30,7 @@ whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / �
 - **职责边界：agent 只 review + comment，不合并**。对仓库的 OPEN PR 主动给出审查意见——approve / request-changes（他人 PR）或 comment（本人账号 PR，GitHub 不允许自审生效），意见必须落成 PR 上的 comment，不只在会话里说。
 - **合并权限属于研发**：默认人工合并；agent 仅在收到**包含"merge/合并"的明确指令**时才可执行合并。CI 变绿、review 通过、任务延续等都不构成合并授权。
 - **review 检查项**：CI 状态、embed.go 登记（新增技能目录）、README 技能表、frontmatter 规范（name 与目录一致）、项目名泄漏、与既有技能重复度。
+- **结果呈现**：review 完成后，在会话中以**列表/表格**汇总每个 PR 的简要信息——编号、标题/分支、review 结论、遗留项、CI 状态——并为每个 PR 附上可点击的链接（`https://github.com/<org>/<repo>/pull/<N>`），方便研发直接打开处理。
 - **定期/自动化 review**：会话开始时检查仓库有无待处理的 OPEN PR，有则主动发起/刷新 review；并向研发建议建立定期或自动化 review 机制（如定时唤起的 review 工作流），由研发决定是否启用。
 
 3a. **叠加分支遇上 squash 合并**：上游 PR 若以 squash 方式合入（master 出现单个 `(\\#N)` 后缀提交、无原始 commit），叠加其上的分支必须重建——旧 commit SHA 全部不在 master 历史里，直接推送会显示 conflict/重复提交：
