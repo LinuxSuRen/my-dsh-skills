@@ -1,6 +1,6 @@
 ---
 name: redis-stream-rpc
-description: Redis Streams 版 RPC 总线模式：注册/心跳/命令/回执流布局、entry 按字段区分双编码、幂等键、consumer group 命名、PEL 回收（XAUTOCLAIM）、窗口仲裁与令牌随流下发。与 mqtt-device-gateway-dev（MQTT 侧）互补，提炼自机器人平台算法服务总线实战。
+description: Redis Streams 版 RPC 总线模式：注册/心跳/命令/回执流布局、entry 按字段区分双编码、幂等键、consumer group 命名、PEL 回收（XAUTOCLAIM）、窗口仲裁与令牌随流下发。与 mqtt-device-gateway-dev（MQTT 侧）互补，提炼自算法服务总线实战。
 whenToUse: 平台需要与一组可插拔服务（算法引擎/插件/worker）经消息总线解耦通信、要求服务自注册与审批纳管、且已部署 Redis 时。
 ---
 
