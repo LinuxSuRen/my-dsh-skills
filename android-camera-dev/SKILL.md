@@ -25,6 +25,9 @@ whenToUse: 开发安卓摄像头采集、MJPEG/RTSP/ONVIF 推流类应用（Came
 - 用 `CaptureRequest.JPEG_ORIENTATION` 让 **HAL 直接转正像素**，快照/MJPEG/RTSP 下游零感知（不依赖 EXIF 方向标签——RTSP 生态普遍无视它）
 - 公式：后摄 `(sensorOrientation - displayRotation + 360) % 360`；**前摄镜像相反** `(sensorOrientation + displayRotation) % 360`；前后摄 sensorOrientation 常见 90/270，必须 per-camera 计算
 - 映射语义以后摄 orientation=90 真机校准（参考 ohos-ipcam-streamer OrientationSensor）
+- **前摄分支必须单独真机校准**：常见债是前摄公式按后摄外推从未验证——实测差 180° 时补 `+180`（与官方两步公式的 `(360-r)%360` 镜像补偿在该 case 等价）；改动只碰前摄分支，别动已校准的后摄/手机路径
+- 竖屏原生面板的 pad 横屏使用（`DisplayDeviceInfo` 尺寸 vs UI ROTATION_90 可判自然方向）：suggest→display 映射仍按竖屏原生推导，但 x 轴符号对应两个横放方向，方向争议用实测数据链定案（`dumpsys sensorservice` 读 accel 实时值 + 快照尺寸 + 用户目检倒向），不靠记忆推符号
+- **会话中途转向后已连接的 RTSP 播放器不会跟随**（沿用建连时尺寸）——用户报"横竖不对"先让他重连；验证输出方向用 HTTP 快照与 ffprobe 双路对比尺寸
 
 ## 4. 稳定性（真机血泪）
 
