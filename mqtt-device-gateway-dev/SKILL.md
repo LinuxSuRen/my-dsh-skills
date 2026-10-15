@@ -1,6 +1,6 @@
 ---
 name: mqtt-device-gateway-dev
-description: MQTT 设备控制面开发方法论（Go/paho + mosquitto）:共享连接 OnConnected 多播防订阅静默丢失、重连窗口订阅恢复、client-id 唯一、RPC over MQTT 协议设计(request_id 幂等/deadline/控制指令不 retain)、retained 配置分发与零长度清理标记、dynsec 动态凭证(%u ACL 隔离/删 client 即吊销/幂等收敛/首启引导死锁)、TCP 探测连接诊断分类、业务键去重的合法重发白名单。源自机器人平台 broker 侧+设备侧双端实战。
+description: MQTT 设备控制面开发方法论（Go/paho + mosquitto）:共享连接 OnConnected 多播防订阅静默丢失、重连窗口订阅恢复、client-id 唯一、RPC over MQTT 协议设计(request_id 幂等/deadline/控制指令不 retain)、retained 配置分发与零长度清理标记、dynsec 动态凭证(%u ACL 隔离/删 client 即吊销/幂等收敛/首启引导死锁)、TCP 探测连接诊断分类、业务键去重的合法重发白名单。源自设备控制面 broker 侧+设备侧双端实战。
 whenToUse: 开发或排查 Go 服务与边缘设备经 MQTT 互联的控制面(设备网关、RPC 下发、状态上报、配置分发、mosquitto dynsec 凭证管理),尤其共享 paho 连接多模块、弱网重连后消息丢失或 RPC 恒超时、broker ACL 静默拒绝、凭证吊销/互踢、同键消息被去重丢弃等问题时使用。
 ---
 
