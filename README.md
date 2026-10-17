@@ -31,6 +31,7 @@
 | [`ai-code-review-gate`](ai-code-review-gate/SKILL.md) | AI 代码变更评审门槛：证据先于断言的完成宣称纪律、外生验证优于自我验证、CRITICAL/IMPORTANT/SUGGESTION 三级评审、高风险清单强制人工逐行、差分评审技术（爆炸半径/历史回归/无测试升级）与借口对照表。AI 时代人类把控的第一、二道闸门。 |
 | [`observability-design`](observability-design/SKILL.md) | 可观测性设计规范：功能与插桩同步交付、埋点前先写 on-call 问题、metrics/trace/log 三信号分工、结构化日志、AI 变更挂 gen_ai 元数据与前后对照指标。人类把控的第三道闸门（上线后可回放）。 |
 | [`ai-debt-ledger`](ai-debt-ledger/SKILL.md) | AI 债务台账：AI 改动提交时 Ai-Source trailer 自声明、技术/认知/意图三重债分类、赎回条件与期限、静态分析差分只看新增问题。防 AI 引入的债务长期沉淀（实证 22.7% 存活）。 |
+| [`disk-capacity-guard`](disk-capacity-guard/SKILL.md) | 长期运行磁盘容量守卫：写入者盘点与上限（日志/录像/队列/缓存/DB/core dump）、磁盘预算 ≤80% 与三档水位降级、崩溃安全淘汰清理、堆积源速查（容器日志/journald/WAL/tmp）与磁盘满排查手册（inode 满、已删文件不释放）。 |
 
 ## 通过 CLI 安装（askills）
 
