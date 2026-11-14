@@ -1,7 +1,7 @@
 ---
 name: branching-workflow
-description: 每次提交/推送代码前，必须先询问 Rick 是新建分支还是用当前分支、走 PR 还是直推；不得擅自决定分支策略。AI agent 只负责 review PR 并加 comment，合并由人工执行或收到明确指令。UI 相关改动的 PR 必须附受影响页面的修改后截图。
-whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / 合并 PR 的时机——提交前先问分支策略；合并前先确认授权；UI 改动的 PR 先备好页面截图。
+description: 每次提交/推送代码前，必须先询问 Rick 是新建分支还是用当前分支、走 PR 还是直推；不得擅自决定分支策略。AI agent 只负责 review PR 并加 comment，合并由人工执行或收到明确指令。UI 相关改动的 PR 必须附受影响页面的修改后截图。push 前必须检查远程默认分支是否前进，变了先合并进当前分支、解决冲突再推。
+whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / 合并 PR 的时机——提交前先问分支策略；合并前先确认授权；UI 改动的 PR 先备好页面截图；push 前查远程默认分支是否前进。
 ---
 
 # Git 分支策略确认规范
@@ -22,6 +22,13 @@ whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / �
    - 未经询问就直推 `master`/主干分支
    - 未经确认就 `gh pr create` 或合并 PR
    - 强推（`--force`）历史重写类操作——即使 Rick 要求过重写，执行前也要再次复述影响范围确认
+
+2a. **push 前默认分支同步检查**：每次 `git push` 前先 `git fetch origin`，确认远程默认分支（一般是 `origin/master`；不确定时 `git symbolic-ref refs/remotes/origin/HEAD`）是否前进：
+   - 前进了（`git rev-list --count HEAD..origin/master` > 0）：先 `git merge origin/master` 进当前分支，解决冲突并跑过项目验证命令（构建/测试）后再 push。冲突解决要理解两侧意图后取舍，禁止盲选一边。
+   - 没前进：直接 push。
+   - 例外——若前进的提交里含当前分支所叠加 PR 的 squash 版（master 出现单提交带 `(#N)` 后缀），直接 merge 会带入重复提交，按 3a 换基底重建后再 push。
+   - 直推默认分支同样适用：push 前先 fetch，远程已前进就先合并（能快进则快进）再 push；禁止用 `--force` 盖掉他人提交。
+   - PR 分支保持与默认分支同步，还能减少 review 冲突噪音与 GitHub mergeable 误报。
 
 3. **PR 流程**（Rick 选择走 PR 时）：建分支 → 按规范提交 → push → `gh pr create`（标题/描述完整；UI 改动必须附页面截图，见下文专节）→ 等 Rick review 合并，**不要自行 merge**。
 
