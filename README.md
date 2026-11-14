@@ -7,7 +7,7 @@
 | 技能 | 说明 |
 |---|---|
 | [`arch-dev-workflow`](skills/arch-dev-workflow/SKILL.md) | 软硬件架构师通用工程方法论：方案先行与最小实现、Git 纪律、验证策略、接口与标识符设计原则、跨端契约与展示分离。适用于任何技术栈的研发任务。 |
-| [`frontend-dev-workflow`](skills/frontend-dev-workflow/SKILL.md) | Rick 的前端研发品味：Vue 3 + Vite 默认、按需上 TS/React、Element Plus 与手写设计令牌双轨、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源前端项目（open-pdf、onvif-ai、smart-chat 等）。 |
+| [`frontend-dev-workflow`](skills/frontend-dev-workflow/SKILL.md) | Rick 的前端研发品味：Vue 3 + Vite 默认（React/Tailwind 可接受、按需启用）、Element Plus 与手写设计令牌双轨、反 AI Slop 红线、数据大屏要点（设计真源/等比缩放/图表统一/验证矩阵）、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源前端项目并吸收社区实践。 |
 | [`git-identity`](skills/git-identity/SKILL.md) | 提交代码必须使用 Rick 本人的 Git 身份（user.name=Rick, email=linuxsuren@users.noreply.github.com），禁止使用 agent/占位身份提交。 |
 | [`branching-workflow`](skills/branching-workflow/SKILL.md) | 每次提交/推送前必须先询问研发：新建分支还是当前分支、走 PR 还是直推；不得擅自决定分支策略。agent 只负责 review PR 并加 comment（建议定期/自动化 review），合并由人工执行或收到明确指令。 |
 | [`open-source-contribution`](skills/open-source-contribution/SKILL.md) | 开源贡献规范：Issue/PR 提交要求、Review 礼仪、good-first-issue 模板、开源文档写作、仓库门面（About/README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。提炼自 [open-source-best-practice](https://github.com/LinuxSuRen/open-source-best-practice)。 |
@@ -26,7 +26,7 @@
 | [`installer-bundle-design`](skills/installer-bundle-design/SKILL.md) | 安装包设计方法论：清单驱动（manifest 自描述、字段只增不改）、单一产物与编排收敛/按 profile 裁剪、白名单自动收集编排引用、在线/离线双模同源版本语义、对外端口全参数化。适用于任何打包→目标机安装类交付工具。 |
 | [`installer-target-execution`](skills/installer-target-execution/SKILL.md) | 目标机执行层方法论：执行通道抽象（Run/Upload/Platform）、提权矩阵（root/sudo -n/sudo -S/docker 组，stdin 凭据安全与双行喂入）、SFTP/md5 增量传输、重装幂等、docker 组授权语义、Linux/macOS/Windows 三平台适配清单。 |
 | [`installer-preflight`](skills/installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
-| [`ui-responsive-list`](skills/ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）与表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）。提炼自多套管理端 Web 列表页改造实战。 |
+| [`ui-responsive-list`](skills/ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）、表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）、移动端韧性红线（320px 不崩：dvh/svh、min() 封顶、容器内滚动、44px 触摸目标）。提炼自多套管理端实战并吸收 doesntbreak 实践。 |
 | [`user-facing-errors`](skills/user-facing-errors/SKILL.md) | 用户可见错误规范：最终用户只看到稳定错误码+普通人能读懂的提示，技术根因只进日志，绝不进对用户的响应。 |
 | [`ai-code-review-gate`](skills/ai-code-review-gate/SKILL.md) | AI 代码变更评审门槛：证据先于断言的完成宣称纪律、外生验证优于自我验证、CRITICAL/IMPORTANT/SUGGESTION 三级评审、高风险清单强制人工逐行、差分评审技术（爆炸半径/历史回归/无测试升级）与借口对照表。AI 时代人类把控的第一、二道闸门。 |
 | [`observability-design`](skills/observability-design/SKILL.md) | 可观测性设计规范：功能与插桩同步交付、埋点前先写 on-call 问题、metrics/trace/log 三信号分工、结构化日志、AI 变更挂 gen_ai 元数据与前后对照指标。人类把控的第三道闸门（上线后可回放）。 |
