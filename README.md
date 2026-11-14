@@ -34,6 +34,7 @@
 | [`disk-capacity-guard`](disk-capacity-guard/SKILL.md) | 长期运行磁盘容量守卫：写入者盘点与上限（日志/录像/队列/缓存/DB/core dump）、磁盘预算 ≤80% 与三档水位降级、崩溃安全淘汰清理、堆积源速查（容器日志/journald/WAL/tmp）与磁盘满排查手册（inode 满、已删文件不释放）。 |
 | [`admin-credential-bootstrap`](admin-credential-bootstrap/SKILL.md) | Web 项目初始管理员凭证发放：首启生成随机强密码、一次性打印控制台并落盘 0600 密码文件、后续启动静默（判定以 DB 为准）、改密成功删文件、重置密码复用同机制；禁止硬编码默认密码。 |
 | [`project-branding`](project-branding/SKILL.md) | 项目门面规范：所有项目必须有 logo（单源文件，README 与 Web 端 favicon/导航统一引用）；开源项目链接一律指向原始上游仓库而非 fork 地址（gh repo view --json parent 判定），安装命令同样用上游路径。 |
+| [`solution-racing`](solution-racing/SKILL.md) | 高不确定需求的多方案竞速验证：并行多个 worktree 分支各跑同源自动化 E2E 判据、一行可证伪假设、证伪即淘汰、时间盒强制收敛、落选结论沉淀。适用于导航算法等复杂未知领域，与 subagent-parallel-dev（方案已定的并行实施）互补。 |
 
 ## 通过 CLI 安装（askills）
 
