@@ -6,35 +6,35 @@
 
 | 技能 | 说明 |
 |---|---|
-| [`arch-dev-workflow`](arch-dev-workflow/SKILL.md) | 软硬件架构师通用工程方法论：方案先行与最小实现、Git 纪律、验证策略、接口与标识符设计原则、跨端契约与展示分离。适用于任何技术栈的研发任务。 |
-| [`frontend-dev-workflow`](frontend-dev-workflow/SKILL.md) | Rick 的前端研发品味：Vue 3 + Vite 默认、按需上 TS/React、Element Plus 与手写设计令牌双轨、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源前端项目（open-pdf、onvif-ai、smart-chat 等）。 |
-| [`git-identity`](git-identity/SKILL.md) | 提交代码必须使用 Rick 本人的 Git 身份（user.name=Rick, email=linuxsuren@users.noreply.github.com），禁止使用 agent/占位身份提交。 |
-| [`branching-workflow`](branching-workflow/SKILL.md) | 每次提交/推送前必须先询问研发：新建分支还是当前分支、走 PR 还是直推；不得擅自决定分支策略。agent 只负责 review PR 并加 comment（建议定期/自动化 review），合并由人工执行或收到明确指令。 |
-| [`open-source-contribution`](open-source-contribution/SKILL.md) | 开源贡献规范：Issue/PR 提交要求、Review 礼仪、good-first-issue 模板、开源文档写作、仓库门面（About/README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。提炼自 [open-source-best-practice](https://github.com/LinuxSuRen/open-source-best-practice)。 |
-| [`android-device-debugging`](android-device-debugging/SKILL.md) | 安卓真机联调方法论：adb 无线调试配对、各厂商 ROM 陷阱（OPPO 冻结器与授权限制、华为 HDC、定制板 app-idle 强停）、相机资源战日志分析、ANR 定位、USB 隧道隔离网络故障、Android CI 构建静默失败根因清单。提炼自 tv-uvc-streamer 多设备实战（小米电视/工控板/OPPO/联想 Android 16）。 |
-| [`onvif-rtsp-dev`](onvif-rtsp-dev/SKILL.md) | ONVIF 与 RTSP/RTP 音视频流开发方法论：WS-Discovery、SOAP 多 Profile、PTZ、对讲回传、TCP interleaved、SDP 多轨协商、H.264/AAC/G.711/JPEG(RFC 2435) 打包、ffmpeg 跨平台采集、子进程托管与录像分段、私有协议适配、ONVIF 设备网关代理、按需推流+MediaMTX/WHEP 分发与 Web 播放端（WHEP/MSE）实测陷阱。跨平台（Go/Java/ArkTS/TS 通用）。 |
-| [`ohos-media-dev`](ohos-media-dev/SKILL.md) | 鸿蒙音视频应用开发方法论：Camera Kit 多摄并发、HCODEC 多实例与码率 int64 键、NV12 32 对齐、OHAudio 采集/播放、长时任务与熄屏、后台相机限制、HAL 超时自愈。 |
-| [`android-camera-dev`](android-camera-dev/SKILL.md) | 安卓相机采集与推流开发方法论：Camera2 多摄并发降级、JPEG 直出/YUV 回退、DRI 归一化、JPEG_ORIENTATION 方向跟随、驱逐自愈、HAL 卡死防护、资源战 dumpsys 分析、拍照产物元数据无损嵌入。真机实测四类设备。 |
-| [`mqtt-device-gateway-dev`](mqtt-device-gateway-dev/SKILL.md) | MQTT 设备控制面开发方法论（Go/paho + mosquitto）：共享连接 OnConnected 多播防订阅静默丢失、重连订阅恢复、RPC over MQTT 协议设计、retained 语义、dynsec 动态凭证（%u ACL 隔离/即时吊销/幂等收敛）、连接诊断分类、业务键去重白名单。源自设备控制面双端实战。 |
-| [`edge-offline-pipeline-dev`](edge-offline-pipeline-dev/SKILL.md) | 边缘设备弱网数据管道开发方法论（Go）：目录即队列的崩溃安全磁盘重试队列（rename 原子状态机/文件名编码重试时间/边写边算 sha256/双重限额）、录像分段录制→remux→幂等上传、弱网事件上报不阻塞任务、离线 SQLite 任务队列、告警边沿触发。 |
-| [`async-job-sse-upload-dev`](async-job-sse-upload-dev/SKILL.md) | Web 长任务与大文件传输方法论（Go 后端+浏览器前端）：202+job_id 异步任务框架、SSE 进度流（X-Accel-Buffering/双清理语义）、统一分片上传引擎（WriteAt 直写峰值磁盘 1×）与客户端（重试先对账/流式 SHA-256）、GB 级下载禁 fetch→blob、nginx/BFF 代理与容器文件替换陷阱。 |
-| [`skill-refresh`](skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
-| [`subagent-parallel-dev`](subagent-parallel-dev/SKILL.md) | 多子代理并行开发大型跨仓库任务：契约先行、早期契约审查、独立复测纪律（实跑复核+stash/纯净worktree对照证实既有失败）、真实服务E2E兜底、有进展才提交。提炼自 6 仓库 7 子代理实战。 |
-| [`redis-stream-rpc`](redis-stream-rpc/SKILL.md) | Redis Streams 版 RPC 总线：注册/心跳/命令/回执流布局、entry 双编码、幂等键、PEL 回收(XAUTOCLAIM)、权重优先窗口仲裁、令牌随流下发与恢复重派。与 mqtt-device-gateway-dev 互补。 |
-| [`skill-distillation`](skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
-| [`robot-cameras`](robot-cameras/SKILL.md) | 机器人（机器狗等）与网络摄像机（IPC）RTSP 取流速查与探测：智身科技 M1、宇泛灵猫 Cyvet、海康（实测通道ID规则）/大华/宇视/水星/TP-LINK/雄迈品牌格式、宇树 Go 系列机载网络；含新型号 ffprobe/ffplay 探测接入流程。 |
-| [`installer-bundle-design`](installer-bundle-design/SKILL.md) | 安装包设计方法论：清单驱动（manifest 自描述、字段只增不改）、单一产物与编排收敛/按 profile 裁剪、白名单自动收集编排引用、在线/离线双模同源版本语义、对外端口全参数化。适用于任何打包→目标机安装类交付工具。 |
-| [`installer-target-execution`](installer-target-execution/SKILL.md) | 目标机执行层方法论：执行通道抽象（Run/Upload/Platform）、提权矩阵（root/sudo -n/sudo -S/docker 组，stdin 凭据安全与双行喂入）、SFTP/md5 增量传输、重装幂等、docker 组授权语义、Linux/macOS/Windows 三平台适配清单。 |
-| [`installer-preflight`](installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
-| [`ui-responsive-list`](ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）与表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）。提炼自多套管理端 Web 列表页改造实战。 |
-| [`user-facing-errors`](user-facing-errors/SKILL.md) | 用户可见错误规范：最终用户只看到稳定错误码+普通人能读懂的提示，技术根因只进日志，绝不进对用户的响应。 |
-| [`ai-code-review-gate`](ai-code-review-gate/SKILL.md) | AI 代码变更评审门槛：证据先于断言的完成宣称纪律、外生验证优于自我验证、CRITICAL/IMPORTANT/SUGGESTION 三级评审、高风险清单强制人工逐行、差分评审技术（爆炸半径/历史回归/无测试升级）与借口对照表。AI 时代人类把控的第一、二道闸门。 |
-| [`observability-design`](observability-design/SKILL.md) | 可观测性设计规范：功能与插桩同步交付、埋点前先写 on-call 问题、metrics/trace/log 三信号分工、结构化日志、AI 变更挂 gen_ai 元数据与前后对照指标。人类把控的第三道闸门（上线后可回放）。 |
-| [`ai-debt-ledger`](ai-debt-ledger/SKILL.md) | AI 债务台账：AI 改动提交时 Ai-Source trailer 自声明、技术/认知/意图三重债分类、赎回条件与期限、静态分析差分只看新增问题。防 AI 引入的债务长期沉淀（实证 22.7% 存活）。 |
-| [`disk-capacity-guard`](disk-capacity-guard/SKILL.md) | 长期运行磁盘容量守卫：写入者盘点与上限（日志/录像/队列/缓存/DB/core dump）、磁盘预算 ≤80% 与三档水位降级、崩溃安全淘汰清理、堆积源速查（容器日志/journald/WAL/tmp）与磁盘满排查手册（inode 满、已删文件不释放）。 |
-| [`admin-credential-bootstrap`](admin-credential-bootstrap/SKILL.md) | Web 项目初始管理员凭证发放：首启生成随机强密码、一次性打印控制台并落盘 0600 密码文件、后续启动静默（判定以 DB 为准）、改密成功删文件、重置密码复用同机制；禁止硬编码默认密码。 |
-| [`project-branding`](project-branding/SKILL.md) | 项目门面规范：所有项目必须有 logo（单源文件，README 与 Web 端 favicon/导航统一引用）；开源项目链接一律指向原始上游仓库而非 fork 地址（gh repo view --json parent 判定），安装命令同样用上游路径。 |
-| [`solution-racing`](solution-racing/SKILL.md) | 高不确定需求的多方案竞速验证：并行多个 worktree 分支各跑同源自动化 E2E 判据、一行可证伪假设、证伪即淘汰、时间盒强制收敛、落选结论沉淀。适用于导航算法等复杂未知领域，与 subagent-parallel-dev（方案已定的并行实施）互补。 |
+| [`arch-dev-workflow`](skills/arch-dev-workflow/SKILL.md) | 软硬件架构师通用工程方法论：方案先行与最小实现、Git 纪律、验证策略、接口与标识符设计原则、跨端契约与展示分离。适用于任何技术栈的研发任务。 |
+| [`frontend-dev-workflow`](skills/frontend-dev-workflow/SKILL.md) | Rick 的前端研发品味：Vue 3 + Vite 默认、按需上 TS/React、Element Plus 与手写设计令牌双轨、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源前端项目（open-pdf、onvif-ai、smart-chat 等）。 |
+| [`git-identity`](skills/git-identity/SKILL.md) | 提交代码必须使用 Rick 本人的 Git 身份（user.name=Rick, email=linuxsuren@users.noreply.github.com），禁止使用 agent/占位身份提交。 |
+| [`branching-workflow`](skills/branching-workflow/SKILL.md) | 每次提交/推送前必须先询问研发：新建分支还是当前分支、走 PR 还是直推；不得擅自决定分支策略。agent 只负责 review PR 并加 comment（建议定期/自动化 review），合并由人工执行或收到明确指令。 |
+| [`open-source-contribution`](skills/open-source-contribution/SKILL.md) | 开源贡献规范：Issue/PR 提交要求、Review 礼仪、good-first-issue 模板、开源文档写作、仓库门面（About/README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。提炼自 [open-source-best-practice](https://github.com/LinuxSuRen/open-source-best-practice)。 |
+| [`android-device-debugging`](skills/android-device-debugging/SKILL.md) | 安卓真机联调方法论：adb 无线调试配对、各厂商 ROM 陷阱（OPPO 冻结器与授权限制、华为 HDC、定制板 app-idle 强停）、相机资源战日志分析、ANR 定位、USB 隧道隔离网络故障、Android CI 构建静默失败根因清单。提炼自 tv-uvc-streamer 多设备实战（小米电视/工控板/OPPO/联想 Android 16）。 |
+| [`onvif-rtsp-dev`](skills/onvif-rtsp-dev/SKILL.md) | ONVIF 与 RTSP/RTP 音视频流开发方法论：WS-Discovery、SOAP 多 Profile、PTZ、对讲回传、TCP interleaved、SDP 多轨协商、H.264/AAC/G.711/JPEG(RFC 2435) 打包、ffmpeg 跨平台采集、子进程托管与录像分段、私有协议适配、ONVIF 设备网关代理、按需推流+MediaMTX/WHEP 分发与 Web 播放端（WHEP/MSE）实测陷阱。跨平台（Go/Java/ArkTS/TS 通用）。 |
+| [`ohos-media-dev`](skills/ohos-media-dev/SKILL.md) | 鸿蒙音视频应用开发方法论：Camera Kit 多摄并发、HCODEC 多实例与码率 int64 键、NV12 32 对齐、OHAudio 采集/播放、长时任务与熄屏、后台相机限制、HAL 超时自愈。 |
+| [`android-camera-dev`](skills/android-camera-dev/SKILL.md) | 安卓相机采集与推流开发方法论：Camera2 多摄并发降级、JPEG 直出/YUV 回退、DRI 归一化、JPEG_ORIENTATION 方向跟随、驱逐自愈、HAL 卡死防护、资源战 dumpsys 分析、拍照产物元数据无损嵌入。真机实测四类设备。 |
+| [`mqtt-device-gateway-dev`](skills/mqtt-device-gateway-dev/SKILL.md) | MQTT 设备控制面开发方法论（Go/paho + mosquitto）：共享连接 OnConnected 多播防订阅静默丢失、重连订阅恢复、RPC over MQTT 协议设计、retained 语义、dynsec 动态凭证（%u ACL 隔离/即时吊销/幂等收敛）、连接诊断分类、业务键去重白名单。源自设备控制面双端实战。 |
+| [`edge-offline-pipeline-dev`](skills/edge-offline-pipeline-dev/SKILL.md) | 边缘设备弱网数据管道开发方法论（Go）：目录即队列的崩溃安全磁盘重试队列（rename 原子状态机/文件名编码重试时间/边写边算 sha256/双重限额）、录像分段录制→remux→幂等上传、弱网事件上报不阻塞任务、离线 SQLite 任务队列、告警边沿触发。 |
+| [`async-job-sse-upload-dev`](skills/async-job-sse-upload-dev/SKILL.md) | Web 长任务与大文件传输方法论（Go 后端+浏览器前端）：202+job_id 异步任务框架、SSE 进度流（X-Accel-Buffering/双清理语义）、统一分片上传引擎（WriteAt 直写峰值磁盘 1×）与客户端（重试先对账/流式 SHA-256）、GB 级下载禁 fetch→blob、nginx/BFF 代理与容器文件替换陷阱。 |
+| [`skill-refresh`](skills/skill-refresh/SKILL.md) | 技能库保鲜：按周期（state.md 配置）调研工具/语言最佳实践，生成带来源的更新提案，研发确认后才修改与提交。 |
+| [`subagent-parallel-dev`](skills/subagent-parallel-dev/SKILL.md) | 多子代理并行开发大型跨仓库任务：契约先行、早期契约审查、独立复测纪律（实跑复核+stash/纯净worktree对照证实既有失败）、真实服务E2E兜底、有进展才提交。提炼自 6 仓库 7 子代理实战。 |
+| [`redis-stream-rpc`](skills/redis-stream-rpc/SKILL.md) | Redis Streams 版 RPC 总线：注册/心跳/命令/回执流布局、entry 双编码、幂等键、PEL 回收(XAUTOCLAIM)、权重优先窗口仲裁、令牌随流下发与恢复重派。与 mqtt-device-gateway-dev 互补。 |
+| [`skill-distillation`](skills/skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
+| [`robot-cameras`](skills/robot-cameras/SKILL.md) | 机器人（机器狗等）与网络摄像机（IPC）RTSP 取流速查与探测：智身科技 M1、宇泛灵猫 Cyvet、海康（实测通道ID规则）/大华/宇视/水星/TP-LINK/雄迈品牌格式、宇树 Go 系列机载网络；含新型号 ffprobe/ffplay 探测接入流程。 |
+| [`installer-bundle-design`](skills/installer-bundle-design/SKILL.md) | 安装包设计方法论：清单驱动（manifest 自描述、字段只增不改）、单一产物与编排收敛/按 profile 裁剪、白名单自动收集编排引用、在线/离线双模同源版本语义、对外端口全参数化。适用于任何打包→目标机安装类交付工具。 |
+| [`installer-target-execution`](skills/installer-target-execution/SKILL.md) | 目标机执行层方法论：执行通道抽象（Run/Upload/Platform）、提权矩阵（root/sudo -n/sudo -S/docker 组，stdin 凭据安全与双行喂入）、SFTP/md5 增量传输、重装幂等、docker 组授权语义、Linux/macOS/Windows 三平台适配清单。 |
+| [`installer-preflight`](skills/installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
+| [`ui-responsive-list`](skills/ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）与表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）。提炼自多套管理端 Web 列表页改造实战。 |
+| [`user-facing-errors`](skills/user-facing-errors/SKILL.md) | 用户可见错误规范：最终用户只看到稳定错误码+普通人能读懂的提示，技术根因只进日志，绝不进对用户的响应。 |
+| [`ai-code-review-gate`](skills/ai-code-review-gate/SKILL.md) | AI 代码变更评审门槛：证据先于断言的完成宣称纪律、外生验证优于自我验证、CRITICAL/IMPORTANT/SUGGESTION 三级评审、高风险清单强制人工逐行、差分评审技术（爆炸半径/历史回归/无测试升级）与借口对照表。AI 时代人类把控的第一、二道闸门。 |
+| [`observability-design`](skills/observability-design/SKILL.md) | 可观测性设计规范：功能与插桩同步交付、埋点前先写 on-call 问题、metrics/trace/log 三信号分工、结构化日志、AI 变更挂 gen_ai 元数据与前后对照指标。人类把控的第三道闸门（上线后可回放）。 |
+| [`ai-debt-ledger`](skills/ai-debt-ledger/SKILL.md) | AI 债务台账：AI 改动提交时 Ai-Source trailer 自声明、技术/认知/意图三重债分类、赎回条件与期限、静态分析差分只看新增问题。防 AI 引入的债务长期沉淀（实证 22.7% 存活）。 |
+| [`disk-capacity-guard`](skills/disk-capacity-guard/SKILL.md) | 长期运行磁盘容量守卫：写入者盘点与上限（日志/录像/队列/缓存/DB/core dump）、磁盘预算 ≤80% 与三档水位降级、崩溃安全淘汰清理、堆积源速查（容器日志/journald/WAL/tmp）与磁盘满排查手册（inode 满、已删文件不释放）。 |
+| [`admin-credential-bootstrap`](skills/admin-credential-bootstrap/SKILL.md) | Web 项目初始管理员凭证发放：首启生成随机强密码、一次性打印控制台并落盘 0600 密码文件、后续启动静默（判定以 DB 为准）、改密成功删文件、重置密码复用同机制；禁止硬编码默认密码。 |
+| [`project-branding`](skills/project-branding/SKILL.md) | 项目门面规范：所有项目必须有 logo（单源文件，README 与 Web 端 favicon/导航统一引用）；开源项目链接一律指向原始上游仓库而非 fork 地址（gh repo view --json parent 判定），安装命令同样用上游路径。 |
+| [`solution-racing`](skills/solution-racing/SKILL.md) | 高不确定需求的多方案竞速验证：并行多个 worktree 分支各跑同源自动化 E2E 判据、一行可证伪假设、证伪即淘汰、时间盒强制收敛、落选结论沉淀。适用于导航算法等复杂未知领域，与 subagent-parallel-dev（方案已定的并行实施）互补。 |
 
 ## 通过 CLI 安装（askills）
 
@@ -62,7 +62,7 @@ clone 本仓库后，在 DSH profile 的 `~/.dsh/profiles/web/cordis.patch.yml` 
   name: '@deepseek-ai/dsh-skill-filesystem'
   config:
     customSkillDirs:
-      - /path/to/my-dsh-skills
+      - /path/to/my-dsh-skills/skills
 ```
 
 之后在任意会话中说“按 arch-dev-workflow 的规范做”，或让 AI 在匹配任务时自动调用。仓库更新后 `git pull` 即可同步最新技能。
@@ -73,7 +73,7 @@ clone 本仓库后，在 DSH profile 的 `~/.dsh/profiles/web/cordis.patch.yml` 
 
 ```bash
 git clone https://github.com/linuxsuren/my-dsh-skills ~/Workspace/github/linuxsuren/my-dsh-skills
-ln -s ~/Workspace/github/linuxsuren/my-dsh-skills/arch-dev-workflow ~/.dsh/skills/arch-dev-workflow
+ln -s ~/Workspace/github/linuxsuren/my-dsh-skills/skills/arch-dev-workflow ~/.dsh/skills/arch-dev-workflow
 ```
 
 ### 方式三：复制进项目
@@ -82,7 +82,7 @@ ln -s ~/Workspace/github/linuxsuren/my-dsh-skills/arch-dev-workflow ~/.dsh/skill
 
 ## 如何贡献
 
-1. 新建 `<skill-name>/SKILL.md`（kebab-case 命名），写入 frontmatter 与指令正文：
+1. 在 `skills/` 下新建 `<skill-name>/SKILL.md`（kebab-case 命名），写入 frontmatter 与指令正文：
    ```yaml
    ---
    name: my-skill

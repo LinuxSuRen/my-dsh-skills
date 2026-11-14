@@ -7,11 +7,26 @@ import (
 	"io/fs"
 )
 
-// Skill directories at the repository root. A new skill must be added
-// to this list to get embedded into the binary.
+// Skill directories live under the skills/ subtree and are embedded via
+// the directory pattern below: adding a new skill requires no
+// registration in this file, only a directory with a valid SKILL.md
+// under skills/.
 //
-//go:embed admin-credential-bootstrap ai-code-review-gate ai-debt-ledger android-camera-dev android-device-debugging arch-dev-workflow async-job-sse-upload-dev branching-workflow disk-capacity-guard edge-offline-pipeline-dev frontend-dev-workflow git-identity mqtt-device-gateway-dev observability-design ohos-media-dev onvif-rtsp-dev open-source-contribution project-branding robot-cameras installer-bundle-design installer-preflight installer-target-execution redis-stream-rpc solution-racing subagent-parallel-dev skill-distillation skill-refresh ui-responsive-list user-facing-errors
+//go:embed skills
 var fsys embed.FS
 
-// FS returns the read-only filesystem with all embedded skills.
-func FS() fs.FS { return fsys }
+// root is the embedded skills/ subtree. fs.Sub can only fail when the
+// directory is missing, which the embed directive above precludes.
+var root fs.FS = mustSub(fsys, "skills")
+
+func mustSub(f fs.FS, dir string) fs.FS {
+	sub, err := fs.Sub(f, dir)
+	if err != nil {
+		panic(err)
+	}
+	return sub
+}
+
+// FS returns the read-only filesystem with all embedded skills, rooted
+// at skills/ so that each child directory is one skill.
+func FS() fs.FS { return root }
