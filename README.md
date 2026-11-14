@@ -35,6 +35,7 @@
 | [`admin-credential-bootstrap`](skills/admin-credential-bootstrap/SKILL.md) | Web 项目初始管理员凭证发放：首启生成随机强密码、一次性打印控制台并落盘 0600 密码文件、后续启动静默（判定以 DB 为准）、改密成功删文件、重置密码复用同机制；禁止硬编码默认密码。 |
 | [`project-branding`](skills/project-branding/SKILL.md) | 项目门面规范：所有项目必须有 logo（单源文件，README 与 Web 端 favicon/导航统一引用）；开源项目链接一律指向原始上游仓库而非 fork 地址（gh repo view --json parent 判定），安装命令同样用上游路径。 |
 | [`solution-racing`](skills/solution-racing/SKILL.md) | 高不确定需求的多方案竞速验证：并行多个 worktree 分支各跑同源自动化 E2E 判据、一行可证伪假设、证伪即淘汰、时间盒强制收敛、落选结论沉淀。适用于导航算法等复杂未知领域，与 subagent-parallel-dev（方案已定的并行实施）互补。 |
+| [`github-ci-release`](skills/github-ci-release/SKILL.md) | GitHub 项目自动化门面：CI（构建+测试+lint，与分支保护联动）与 Release（tag 触发）必须有对应 GitHub Actions；Go 项目提供二进制与容器双轨分发（goreleaser 多平台交叉编译、buildx 多架构镜像推 ghcr），同版本同源。 |
 | [`patent-disclosure`](skills/patent-disclosure/SKILL.md) | 中国专利交底书：发明/实用新型/外观设计的专利点挖掘、轻量查新与成文，首篇定稿后可做保护型 1+N 专利布局（围栏）。含填表、线稿、CAD STEP 解析、公式 OMML、mermaid 出图与 Word 定稿工具链。 |
 | [`patent-application`](skills/patent-application/SKILL.md) | 专利申请文件撰写：把已有交底改写为权利要求书、说明书、摘要与黑白附图四件套；含材料门禁、标号核对、支持性审查、权要审计工具。须显式点名并指定交底目录。 |
 | [`patent-docket`](skills/patent-docket/SKILL.md) | 专利案卷会稿：单 agent 协调者，按发明人/工程师给的材料一趟串起交底书与申请文件；立案、分诊、派工、记轮次，申请问题清单上的缺口最多改三轮。须显式点名。 |
