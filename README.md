@@ -28,6 +28,7 @@
 | [`installer-preflight`](skills/installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
 | [`ui-responsive-list`](skills/ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）、表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）、移动端韧性红线（320px 不崩：dvh/svh、min() 封顶、容器内滚动、44px 触摸目标）。提炼自多套管理端实战并吸收 doesntbreak 实践。 |
 | [`user-facing-errors`](skills/user-facing-errors/SKILL.md) | 用户可见错误规范：最终用户只看到稳定错误码+普通人能读懂的提示，技术根因只进日志，绝不进对用户的响应。 |
+| [`web-launch-dx`](skills/web-launch-dx/SKILL.md) | Web 应用启动体验规范：后端端口漂移（被占时向后探测，默认开启、可 strict 关闭）+ 漂移地址传导到日志/对外 URL/前端 dev 代理 + 服务就绪后自动打开实际地址（默认开启、可关闭）。提炼自 local-onvif-adapter 实战。 |
 | [`ai-code-review-gate`](skills/ai-code-review-gate/SKILL.md) | AI 代码变更评审门槛：证据先于断言的完成宣称纪律、外生验证优于自我验证、CRITICAL/IMPORTANT/SUGGESTION 三级评审、高风险清单强制人工逐行、差分评审技术（爆炸半径/历史回归/无测试升级）与借口对照表。AI 时代人类把控的第一、二道闸门。 |
 | [`observability-design`](skills/observability-design/SKILL.md) | 可观测性设计规范：功能与插桩同步交付、埋点前先写 on-call 问题、metrics/trace/log 三信号分工、结构化日志、AI 变更挂 gen_ai 元数据与前后对照指标。人类把控的第三道闸门（上线后可回放）。 |
 | [`ai-debt-ledger`](skills/ai-debt-ledger/SKILL.md) | AI 债务台账：AI 改动提交时 Ai-Source trailer 自声明、技术/认知/意图三重债分类、赎回条件与期限、静态分析差分只看新增问题。防 AI 引入的债务长期沉淀（实证 22.7% 存活）。 |
