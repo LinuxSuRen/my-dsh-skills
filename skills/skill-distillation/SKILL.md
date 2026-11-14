@@ -39,5 +39,5 @@ whenToUse: 完成一个复杂、高难度或耗时较长的任务后使用；普
 - **先查重**：通用库与项目级技能目录是否已覆盖？已覆盖 → 生成修订提案；未覆盖 → 新建提案。
 - 提案给出：`name`/`description`/`whenToUse`、正文规则、目标仓库；**研发确认后才动文件**。
 - 写入遵循目标仓库的提交纪律：分支策略先问（独立新需求走 worktree）、git-identity 身份、PR 合入。
-- 新增技能目录加入 my-dsh-skills 时，同步登记 askills 的 `embed.go` 嵌入清单。
+- 新增技能目录放 my-dsh-skills 的 `skills/` 子目录即自动嵌入（`//go:embed skills` 目录通配，无需登记清单），README 技能表仍需补行。
 - 技能正文保持**动作化**：写可执行的规则，不堆叙述。

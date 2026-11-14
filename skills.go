@@ -8,7 +8,7 @@ import (
 
 // All returns the metadata of every embedded skill, sorted by name.
 func All() ([]Meta, error) {
-	entries, err := fs.ReadDir(fsys, ".")
+	entries, err := fs.ReadDir(FS(), ".")
 	if err != nil {
 		return nil, fmt.Errorf("read embedded skills: %w", err)
 	}
@@ -17,7 +17,7 @@ func All() ([]Meta, error) {
 		if !e.IsDir() {
 			continue
 		}
-		data, err := fs.ReadFile(fsys, e.Name()+"/SKILL.md")
+		data, err := fs.ReadFile(FS(), e.Name()+"/SKILL.md")
 		if err != nil {
 			return nil, fmt.Errorf("read %s/SKILL.md: %w", e.Name(), err)
 		}

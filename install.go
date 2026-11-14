@@ -23,7 +23,7 @@ func Install(target string, names []string) ([]string, error) {
 		return nil, fmt.Errorf("create target directory: %w", err)
 	}
 	for _, name := range names {
-		if err := copySkill(fsys, name, filepath.Join(target, name)); err != nil {
+		if err := copySkill(FS(), name, filepath.Join(target, name)); err != nil {
 			return nil, fmt.Errorf("install %s: %w", name, err)
 		}
 	}
