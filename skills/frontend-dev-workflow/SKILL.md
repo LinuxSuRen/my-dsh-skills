@@ -1,7 +1,7 @@
 ---
 name: frontend-dev-workflow
-description: Rick 的前端研发品味：Vue 3 + Vite 默认、按需上 TS/React、Element Plus 与手写设计令牌双轨、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源项目。
-whenToUse: 任何前端开发任务——新建 web 子项目、写页面/组件、封装 API、选型 UI 方案、写样式或用户文案时，先按本技能对齐技术选型与代码风格，再动手。
+description: Rick 的前端研发品味：Vue 3 + Vite 默认（React/Tailwind 可接受、按需启用）、Element Plus 与手写设计令牌双轨、数据大屏要点（设计真源/等比缩放/图表统一/验证矩阵）、极简依赖、fetch 封装 API 层、自清理组件模式、中文文案规范。提炼自 linuxsuren 开源项目并吸收社区反 slop 实践。
+whenToUse: 任何前端开发任务——新建 web 子项目、写页面/组件、封装 API、选型 UI 方案、做数据大屏、写样式或用户文案时，先按本技能对齐技术选型与代码风格，再动手。
 ---
 
 # 前端研发工作流（Rick 的前端品味）
@@ -12,10 +12,10 @@ whenToUse: 任何前端开发任务——新建 web 子项目、写页面/组件
 
 | 维度 | 默认选择 | 例外条件 |
 |---|---|---|
-| 框架 | Vue 3 | 宿主/嵌入环境是 React（如 DSH 插件）才用 React 18 |
+| 框架 | Vue 3 | React 18：宿主/嵌入环境是 React（如 DSH 插件），或研发明确指定——Vue 是默认倾向，不是排他 |
 | 构建 | Vite，`package.json` 里只有 dev/build/preview | 不引脚手架全家桶 |
 | 语言 | 简单工具/CRUD 管理台用 JS | 实时媒体、复杂状态机、长生命周期项目上 TS（`vue-tsc -b`） |
-| UI 组件 | CRUD 管理台用 Element Plus（+ @element-plus/icons-vue） | 产品化/品牌化 UI 手写 CSS + 设计令牌，不用 Tailwind |
+| UI 组件 | CRUD 管理台用 Element Plus（+ @element-plus/icons-vue） | 产品化/品牌化 UI 手写 CSS + 设计令牌；Tailwind + shadcn/ui 为可接受第三轨（研发指定或团队既有栈），默认不主动引入 |
 | 状态管理 | 无库：Vue 模块级 `reactive` store 或组件内 `ref`；React 手写 store + `useSyncExternalStore` | — |
 | 路由 | 无 vue-router：`view = ref('xxx')` + `v-show` 标签页切换，视图拆到 `views/*.vue` | 真有多路由需求再议 |
 | Lint/格式化 | 不配 ESLint/Prettier，风格靠本规范约束 | — |
@@ -81,25 +81,45 @@ React：函数组件 + hooks；稳定引用用 `useCallback`/`useRef`；store �
 
 视觉态度（对齐 [Anthropic frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)）：克制、有意图；拒绝模板化默认样式——不用全大写标签、单词强调、渐变装饰、千篇一律卡片阵列；结构即信息；动效只用于回应操作（打开、展开、确认），不做入场动画堆砌。
 
-## 6. 文案规范（与 arch-dev-workflow「展示与数据分离」一致）
+**反 AI Slop 红线**（吸收自社区实践 [huo15-openclaw-frontend-design](https://github.com/zhaobod1/huo15-skills) 等，按本库口径改写）——产出有辨识度，不做"一眼 AI 生成"的界面：
+
+- 标识字体不用 Inter/Roboto/Arial 等通用默认；字体选择要有意图（中文优先字体栈见令牌节）
+- 拒绝纯白/平灰无层次背景；背景用令牌分层（base/panel/elevated）营造纵深
+- 拒绝所有卡片同尺寸、同圆角、等距阵列；栅格节奏要有主次与断点
+- 不拿 emoji 当功能图标；图标用统一图标库
+- 同一界面视觉变量（圆角/阴影/间距）不超过三档
+
+## 6. 数据大屏（Dashboard）要点
+
+面向控制室/工厂电视/汇报演示等大屏交付场景（吸收自 [dashboard-craft](https://github.com/loadingx865-star/dashboard-craft) 理念，按本库口径改写）：
+
+- **设计单一真源**：配色、字号、间距、图表色板只在一处定义（主题单入口文件），改一处全局生效；无真源不写样式——散落的魔法色值/字号是二期漂移的根源。
+- **分辨率与缩放**：以 1920×1080 为设计基线；整屏用一个等比缩放容器（transform: scale 或 rem 方案）适配目标分辨率，禁止各组件各自缩放。
+- **图表统一入口**：同类图表走一个封装组件（统一 tooltip、legend、色板、空态、加载态），禁止各页面手写各的图表配置——"一个概念一处实现"。
+- **验证矩阵**：交付前在目标分辨率 × 浏览器矩阵上验证（现场大屏的浏览器不可控）；保存基线截图存档，二期与一期对照不漂移。
+- 数据源统一走 API 层（§3），轮询/实时推送收敛到一处；KPI 数字动画注意性能与降级。
+- 窄屏韧性（表格容器内滚动、min() 封顶等）见 ui-responsive-list 的移动端韧性红线。
+
+## 7. 文案规范（与 arch-dev-workflow「展示与数据分离」一致）
 
 - 用户可见文案由前端定义，后端只返回稳定 code/枚举；前端维护映射表，未知 code 回退兜底文案。
 - 错误提示友好包装：说清发生了什么 + 怎么办（"请求超时，请检查网络后重试"）；禁止透传 `rpc error`、`connection refused` 等底层技术错误。
 - 中文文案为主，专有名词（服务名、命令、协议名）保留英文；同一概念全文同一称呼；禁止后置括号补充解释。
 - 操作动词全流程一致：保存就是"保存"，不要一处"提交"一处"发布"。
 
-## 7. 验证
+## 8. 验证
 
 - TS 项目：`vue-tsc -b && vite build`（Vue）/ `tsc -b && vite build`（React）；JS 项目：`vite build`。
 - 关键路径端到端用 Playwright（`e2e/*.spec.ts`）。
 - 遵循 arch-dev-workflow：不在本机跑重型构建/部署验证，交给 CI。
 
-## 8. 决策速查
+## 9. 决策速查
 
 | 场景 | 选择 |
 |---|---|
 | 新工具的配套管理界面 | Vue 3 + JS + Vite + Element Plus，管理台骨架 |
 | 品牌化产品 UI / 演示大屏 | Vue 3 + TS + 手写令牌 CSS，app-shell 骨架 |
+| 数据大屏 / 监控大屏 | Vue 3 + TS + ECharts 统一封装 + 1920×1080 等比缩放 shell，主题单一真源，交付前跑分辨率验证矩阵 |
 | 嵌入 React 宿主的页面 | React 18 + TS + CSS Modules + tokens.css |
 | 需要全局状态 | 模块级 reactive store / useSyncExternalStore，不引库 |
 | 需要多个页面 | ref 标签页 + views/，不引 vue-router |
