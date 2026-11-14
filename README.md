@@ -28,6 +28,17 @@
 | [`installer-preflight`](installer-preflight/SKILL.md) | 安装前置校验与故障预防：分层校验（建连前→上传前→拉镜像前）、架构/端口预检、错误定位到元凶并带下一步动作、Docker 高频陷阱表（containerd save 多架构、inspect 架构误报、bind 源变目录、半参数化端口、拼接式地址）、证书固定名输入、shim 冒烟验证策略。 |
 | [`ui-responsive-list`](ui-responsive-list/SKILL.md) | 列表页 UI 自适应规范：筛选区「放得下才显示 + 折叠展开多行」（ResizeObserver 实测宽度、纯函数折叠计算、隐藏控件保持挂载）与表格/卡片双视图按视口定默认（窄屏卡片、宽屏表格，用户偏好优先）。提炼自多套管理端 Web 列表页改造实战。 |
 | [`user-facing-errors`](user-facing-errors/SKILL.md) | 用户可见错误规范：最终用户只看到稳定错误码+普通人能读懂的提示，技术根因只进日志，绝不进对用户的响应。 |
+| [`patent-disclosure`](patent-disclosure/SKILL.md) | 中国专利交底书：发明/实用新型/外观设计的专利点挖掘、轻量查新与成文，首篇定稿后可做保护型 1+N 专利布局（围栏）。含填表、线稿、CAD STEP 解析、公式 OMML、mermaid 出图与 Word 定稿工具链。 |
+| [`patent-application`](patent-application/SKILL.md) | 专利申请文件撰写：把已有交底改写为权利要求书、说明书、摘要与黑白附图四件套；含材料门禁、标号核对、支持性审查、权要审计工具。须显式点名并指定交底目录。 |
+| [`patent-docket`](patent-docket/SKILL.md) | 专利案卷会稿：单 agent 协调者，按发明人/工程师给的材料一趟串起交底书与申请文件；立案、分诊、派工、记轮次，申请问题清单上的缺口最多改三轮。须显式点名。 |
+| [`patent-search`](patent-search/SKILL.md) | 中国专利公布公告著录检索：发明人/申请人/分类号/名称/摘要高级查询（epub.cnipa.gov.cn），可从单图或权利要求抽关键字生成检索式；结果落 Markdown 报告并给机读 JSON。 |
+| [`patent-reader`](patent-reader/SKILL.md) | 专利通俗解读：公开号/PDF/全文读成通俗笔记、Canvas 图谱与术语网，可写入 Obsidian 库；独权拆成稳定特征行（claim_features.json）作为对照表输入。 |
+| [`patent-chart`](patent-chart/SKILL.md) | 权利要求对照表（claim chart）：独权拆成技术特征逐格比对对比文件/产品/标准，附证据与强弱；用于无效对照、FTO 初筛、侵权/EoU、SEP。只出底稿，不出法律意见。须显式点名。 |
+| [`patent-map`](patent-map/SKILL.md) | 专利地图：基于已解读入库的 Obsidian 案例库摊开五种图（语义地形、申请人重叠、文内引证等），bge-small-zh 向量本地渲染。须显式点名且需已有解读入库。 |
+| [`patent-oa`](patent-oa/SKILL.md) | 审查答复（OA）辅助：审查意见问答与意见陈述草稿，案例库支撑检索，库薄时引导案例入库；用户确认采纳后才出 Word 陈述。须显式点名。 |
+| [`patent-exam-policy`](patent-exam-policy/SKILL.md) | 专利政策简报：对照国知局近期审查口径，说明对交底写法/本稿的影响并提示申请书式；技能进化仅为旁路，默认只改交底包。须显式点名。 |
+
+以上 9 个 `patent-*` 技能源自 [handsomestWei/patent-disclosure-skill](https://github.com/handsomestWei/patent-disclosure-skill)（MIT，© handsomestWei），经适配融入本仓库：原 `skills/<name>/` 布局扁平化为顶层目录，包间路径引用与依赖清单同步改写，各目录内保留原作者 [LICENSE](patent-disclosure/LICENSE)。交底主链路需要 Python 3.9+，在 `patent-disclosure/` 下执行 `pip install -r requirements.txt`（python-docx、latex2mathml、playwright 等）；其余可选依赖见各包 `tools/README.md`，完整使用文档见上游 [INSTALL.md](https://github.com/handsomestWei/patent-disclosure-skill/blob/main/INSTALL.md)。
 
 ## 通过 CLI 安装（askills）
 

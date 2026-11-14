@@ -8,9 +8,11 @@ import (
 )
 
 // Skill directories at the repository root. A new skill must be added
-// to this list to get embedded into the binary.
+// to this list to get embedded into the binary. The patent-* skills use
+// the `all:` prefix so underscore-prefixed files (e.g. Python `__init__.py`)
+// shipped by the upstream project are embedded too.
 //
-//go:embed android-camera-dev android-device-debugging arch-dev-workflow async-job-sse-upload-dev branching-workflow edge-offline-pipeline-dev frontend-dev-workflow git-identity mqtt-device-gateway-dev ohos-media-dev onvif-rtsp-dev open-source-contribution robot-cameras installer-bundle-design installer-preflight installer-target-execution redis-stream-rpc subagent-parallel-dev skill-distillation skill-refresh ui-responsive-list user-facing-errors
+//go:embed android-camera-dev android-device-debugging arch-dev-workflow async-job-sse-upload-dev branching-workflow edge-offline-pipeline-dev frontend-dev-workflow git-identity mqtt-device-gateway-dev ohos-media-dev onvif-rtsp-dev open-source-contribution all:patent-application all:patent-chart all:patent-disclosure all:patent-docket all:patent-exam-policy all:patent-map all:patent-oa all:patent-reader all:patent-search robot-cameras installer-bundle-design installer-preflight installer-target-execution redis-stream-rpc subagent-parallel-dev skill-distillation skill-refresh ui-responsive-list user-facing-errors
 var fsys embed.FS
 
 // FS returns the read-only filesystem with all embedded skills.
