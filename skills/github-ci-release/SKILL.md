@@ -1,7 +1,7 @@
 ---
 name: github-ci-release
-description: GitHub 项目自动化门面：CI 与 Release 必须有对应 GitHub Actions（构建/测试/lint + tag 触发发布）；Go 项目提供二进制与容器双轨分发（goreleaser 多平台 + 多架构镜像推 ghcr），同版本同源。
-whenToUse: 新建 GitHub 仓库、补齐 CI/release workflow、配置分支保护的合并门槛、为 Go 项目做发布（goreleaser、Docker 镜像、ghcr）、或检查项目自动化完整性时。
+description: GitHub 项目自动化门面：CI 与 Release 必须有对应 GitHub Actions（构建/测试/lint + tag 触发发布）；Go 项目提供二进制与容器双轨分发（goreleaser 多平台 + 多架构镜像推 ghcr），同版本同源；所有发行的 CLI 二进制必须支持 version 子命令查看语义化版本号。
+whenToUse: 新建 GitHub 仓库、补齐 CI/release workflow、配置分支保护的合并门槛、为 Go 项目做发布（goreleaser、Docker 镜像、ghcr）、给 CLI 加版本命令、或检查项目自动化完整性时。
 ---
 
 # GitHub 项目 CI 与 Release 规范
@@ -40,7 +40,21 @@ whenToUse: 新建 GitHub 仓库、补齐 CI/release workflow、配置分支保�
 - 二进制与镜像**同一 tag、同一 commit** 构建触发（版本单源，见 installer-bundle-design）；禁止 tag 与镜像各自漂移。
 - README 安装章节写全三条路径：`go install` / Release 二进制 / 容器镜像，各附一行命令。
 
-## 4. 检查清单（新仓库/盘点旧仓库）
+## 4. CLI 二进制的版本可见性
+
+**所有发行的命令行二进制必须支持 `xx version` 子命令查看版本号，且版本号必须是语义化版本（semver）。**
+
+- `version` 子命令是硬要求——用户报障的第一句话就是"你什么版本"，日志与 issue 模板也依赖它；`--version` 旗标建议同开（cobra 设 `rootCmd.Version` 一行即得）。
+- **语义化版本** `vX.Y.Z[-prerelease]`（Go 生态带 v 前缀）：major=不兼容变更、minor=新功能、patch=修复；预发布用 `-rc.1`/`-beta.1` 后缀。
+- **版本与 tag 严格同源**：`xx version` 输出 = git tag = Release 名 = 容器镜像 tag = goreleaser 版本。禁止手写版本常量与 tag 各自漂移——发版只打 tag，版本号由构建注入。
+- Go 实现惯例：
+  ```go
+  var version = "dev" // 构建时注入：-ldflags "-X main.version=v1.2.3"
+  ```
+  goreleaser 自动注入（`ldflags: -X main.version={{.Version}}`）；建议同时注入 commit 与构建日期，输出 `v1.2.3 (abc1234, 2026-11-14)` 便于排查。
+- 源码/开发构建显示 `dev`（或 `v0.0.0-dev+<commit>`），**不冒充发布版**；CI 里可加一步校验：打 tag 构建后 `./xx version` 输出必须等于 tag。
+
+## 5. 检查清单（新仓库/盘点旧仓库）
 
 1. CI workflow 存在且 PR 上真实跑（绿徽章）？
 2. 分支保护把 CI 设为合并门槛？
@@ -48,4 +62,5 @@ whenToUse: 新建 GitHub 仓库、补齐 CI/release workflow、配置分支保�
 4. Go 项目：goreleaser 配置 + 多阶段多架构镜像推 ghcr？
 5. 二进制与镜像同版本同源、checksums 齐全？
 6. README 安装章节三路齐全（go install/二进制/容器）？
-7. dependabat 覆盖 actions 版本？
+7. `xx version` 可用、输出语义化版本且与 tag 一致、构建注入而非手写常量？
+8. dependabat 覆盖 actions 版本？
