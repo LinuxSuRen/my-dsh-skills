@@ -1,7 +1,7 @@
 ---
 name: branching-workflow
-description: 每次提交/推送代码前，必须先询问 Rick 是新建分支还是用当前分支、走 PR 还是直推；不得擅自决定分支策略。AI agent 只负责 review PR 并加 comment，合并由人工执行或收到明确指令。
-whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / 合并 PR 的时机——提交前先问分支策略；合并前先确认授权。
+description: 每次提交/推送代码前，必须先询问 Rick 是新建分支还是用当前分支、走 PR 还是直推；不得擅自决定分支策略。AI agent 只负责 review PR 并加 comment，合并由人工执行或收到明确指令。UI 相关改动的 PR 必须附受影响页面的修改后截图。
+whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / 合并 PR 的时机——提交前先问分支策略；合并前先确认授权；UI 改动的 PR 先备好页面截图。
 ---
 
 # Git 分支策略确认规范
@@ -23,7 +23,7 @@ whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / �
    - 未经确认就 `gh pr create` 或合并 PR
    - 强推（`--force`）历史重写类操作——即使 Rick 要求过重写，执行前也要再次复述影响范围确认
 
-3. **PR 流程**（Rick 选择走 PR 时）：建分支 → 按规范提交 → push → `gh pr create`（标题/描述完整）→ 等 Rick review 合并，**不要自行 merge**。
+3. **PR 流程**（Rick 选择走 PR 时）：建分支 → 按规范提交 → push → `gh pr create`（标题/描述完整；UI 改动必须附页面截图，见下文专节）→ 等 Rick review 合并，**不要自行 merge**。
 
 ## PR Review 与合并权限
 
@@ -41,3 +41,11 @@ whenToUse: 任何即将执行 git commit / git push / 创建 PR / review PR / �
 4. **例外**：连续多个小改动属于同一任务且 Rick 已明确过策略（例如"接下来的改动都走 PR"），沿用已确认的策略即可，无需每次重复询问；但任务切换或涉及主干直推时必须重新确认。
 
 5. 与 `git-identity` 技能配合：提交身份永远是 Rick 本人（`Rick <linuxsuren@users.noreply.github.com>`）。
+
+## UI 改动的 PR 必须带页面截图
+
+- **范围**：提交内容涉及 UI 部分——页面、组件、样式、布局、交互与用户可见文案——走 PR 时，PR 描述里必须放**受影响页面的修改后截图**；纯后端/构建/文档改动不适用。
+- **覆盖度**：PR 动了几个页面/视图就给几张；响应式或按视口分支的改动（对齐 `ui-responsive-list`）补齐各断点视口；弹窗、错误态等关键交互状态能用截图表达的也带上。
+- **怎么截**：本地把应用跑起来截图（Playwright 临时脚本即可，可复用或沉淀到项目 e2e 设施）；图片提交进 PR 分支并在描述中以相对路径引用，或直接粘贴进 PR 描述。
+- **真实性**：截图必须来自本分支构建的真实渲染，禁止拿旧图、设计稿或其他分支产物充数；每张注明对应页面与视口。
+- **评审对齐**：UI 改动 PR 缺截图视为描述不完整——review 时 request-changes（本人账号 PR 则 comment 指出），补齐后再过。
