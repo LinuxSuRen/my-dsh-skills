@@ -1,2 +1,44 @@
 # build artifacts
 /askills
+
+# patent skills：用户产出（整目录不提交）
+outputs/
+disclosures/
+tmp/
+*.tmp
+~$*
+
+# patent skills：示例专利材料（仅提交 README 中的镜像链接；PDF/TXT 等本地自备）
+patent-reader/examples/example_patent_reader/**
+!patent-reader/examples/example_patent_reader/README.md
+
+# patent skills：国知局抓取结果缓存
+patent-disclosure/tools/crawl/_last_result*.html
+patent-disclosure/tools/crawl/_last_home.html
+patent-search/tools/_last_result*.html
+patent-reader/tools/crawl/_last_result*.html
+
+# patent skills：Python / tools
+**/node_modules/
+__pycache__/
+*.py[cod]
+.pyo
+.venv/
+venv/
+.venv-step310/
+patent-disclosure/tools/cad-env/
+*.egg-info/
+
+# patent skills：math_render 联调产物
+patent-disclosure/tests/_math_test_figures/
+patent-disclosure/tests/_math_test_out.md
+patent-disclosure/tests/_math_test_bad.md
+
+# patent skills：技能市场上架限制：不得提交 Obsidian Bases（*.base）；源稿用 *.base.yaml，拷库时再写成 .base
+patent-reader/assets/obsidian/*.base
+patent-oa/assets/obsidian/*.base
+
+# patent skills：IPC 方案源文件（只提交编译后的 ipc_subclasses_*.csv）
+patent-map/data/_ipc_*
+patent-map/data/_c08g*
+patent-map/tools/ipc_scheme/cache/

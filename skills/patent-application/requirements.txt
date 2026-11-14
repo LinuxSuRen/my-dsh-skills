@@ -1,0 +1,3 @@
+# patent-application tools need PyYAML only. The docx/figure pipeline reuses
+# patent-disclosure/requirements.txt (python-docx, latex2mathml, playwright).
+PyYAML>=6.0

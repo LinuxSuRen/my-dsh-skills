@@ -1,0 +1,4 @@
+# CNIPA bibliographic search (patent-search). Same playwright as patent-disclosure/requirements.txt.
+# System Chrome/Edge is enough; no need for `playwright install chromium`.
+# Probe: python tools/browser.py --probe
+playwright>=1.40.0
