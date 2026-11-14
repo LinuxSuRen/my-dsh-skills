@@ -22,6 +22,7 @@
 | [`subagent-parallel-dev`](skills/subagent-parallel-dev/SKILL.md) | 多子代理并行开发大型跨仓库任务：契约先行、早期契约审查、独立复测纪律（实跑复核+stash/纯净worktree对照证实既有失败）、真实服务E2E兜底、有进展才提交。提炼自 6 仓库 7 子代理实战。 |
 | [`redis-stream-rpc`](skills/redis-stream-rpc/SKILL.md) | Redis Streams 版 RPC 总线：注册/心跳/命令/回执流布局、entry 双编码、幂等键、PEL 回收(XAUTOCLAIM)、权重优先窗口仲裁、令牌随流下发与恢复重派。与 mqtt-device-gateway-dev 互补。 |
 | [`skill-distillation`](skills/skill-distillation/SKILL.md) | 任务后经验沉淀：复杂/高难度/耗时长的任务完成后总结可复用经验，区分通用技能与项目级技能，经研发确认后写入对应仓库。 |
+| [`askills-sync`](skills/askills-sync/SKILL.md) | 技能同步安装：仓库根存在 askills 二进制时，技能变更落库后（提交/合并/pull）或安装落后时，重建二进制并调用 askills install 同步到各 AI 编码工具目录；覆盖式幂等，重跑即升级。 |
 | [`robot-cameras`](skills/robot-cameras/SKILL.md) | 机器人（机器狗等）与网络摄像机（IPC）RTSP 取流速查与探测：智身科技 M1、宇泛灵猫 Cyvet、海康（实测通道ID规则）/大华/宇视/水星/TP-LINK/雄迈品牌格式、宇树 Go 系列机载网络；含新型号 ffprobe/ffplay 探测接入流程。 |
 | [`installer-bundle-design`](skills/installer-bundle-design/SKILL.md) | 安装包设计方法论：清单驱动（manifest 自描述、字段只增不改）、单一产物与编排收敛/按 profile 裁剪、白名单自动收集编排引用、在线/离线双模同源版本语义、对外端口全参数化。适用于任何打包→目标机安装类交付工具。 |
 | [`installer-target-execution`](skills/installer-target-execution/SKILL.md) | 目标机执行层方法论：执行通道抽象（Run/Upload/Platform）、提权矩阵（root/sudo -n/sudo -S/docker 组，stdin 凭据安全与双行喂入）、SFTP/md5 增量传输、重装幂等、docker 组授权语义、Linux/macOS/Windows 三平台适配清单。 |
