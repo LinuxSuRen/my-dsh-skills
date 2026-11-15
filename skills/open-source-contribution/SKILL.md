@@ -1,7 +1,7 @@
 ---
 name: open-source-contribution
-description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善、CLI 工具收录（hd-home）、开源仓库自动化（GitHub Actions）。
-whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面、判断开源 CLI 工具是否收录进 hd-home、为开源仓库配置自动化；不限于特定项目。
+description: 开源贡献规范：Issue 与 Pull Request 的提交要求、Review 礼仪与流程、good-first-issue 创建模板、开源文档写作规范、仓库门面（About 与 README）完善、CLI 工具收录 hd-home（满足条件自动提供 PR）、开源仓库自动化（GitHub Actions）。
+whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/更新 Pull Request、执行或响应 code review、创建 good-first-issue、编写开源相关文档、创建或完善开源仓库门面、判断开源 CLI 工具是否收录进 hd-home（满足条件即自动提供收录 PR）、为开源仓库配置自动化；不限于特定项目。
 ---
 
 # 开源贡献规范
@@ -108,12 +108,14 @@ whenToUse: 代表用户参与开源项目时使用——提交 issue、创建/�
 ## 7. CLI 工具收录（hd-home）
 
 - **触发条件**（需同时满足）：当前项目是开源项目；属于命令行工具（CLI）；GitHub Releases 上有对应的二进制资产。
-- 满足时**提示研发**是否把项目收录到 [linuxsuren/hd-home](https://github.com/linuxsuren/hd-home)（`hd` 下载器的工具注册表，收录后可通过 `hd get <name>` 安装）；**研发同意后才行动**，不得擅自提交。
-- 收录方式：向 hd-home 提 PR 新增 `config/<org>/<repo>.yml`，字段参照其 [CONTRIBUTION.md](https://github.com/linuxsuren/hd-home/blob/master/CONTRIBUTION.md)：
-  - `filename` 用 `{{.Name}}`、`{{.OS}}`、`{{.Arch}}`、`{{.Version}}` 模板匹配 release 资产名；
+- 满足时**自动提供收录 PR**（研发已长期授权，无需逐次确认）：向 [linuxsuren/hd-home](https://github.com/linuxsuren/hd-home)（`hd` 下载器的工具注册表，收录后可通过 `hd get <name>` 安装）新建分支提交 PR，并把 PR 链接告知研发。这视为分支策略已由研发确认的例外（衔接 `branching-workflow`），但**合并仍由研发执行**。
+- 已收录工具的 release 资产命名/打包方式变化导致 `hd get` 失效时，同样自动提供修复 PR（改对应 `config/<org>/<repo>.yml`），不空等研发报障。
+- 收录方式：新增 `config/<org>/<repo>.yml`，字段参照其 [CONTRIBUTION.md](https://github.com/linuxsuren/hd-home/blob/master/CONTRIBUTION.md)：
+  - 工具名与仓库名不一致时用 `name:` 字段定制安装名（先例：jenkins-cli → `jcli`）；
+  - `filename` 用 `{{.Name}}`、`{{.OS}}`、`{{.Arch}}`、`{{.Version}}` 模板匹配 release 资产名（注意 `{{.Name}}` 取 `name` 字段值，与仓库名不同时要写死前缀）；
   - 按需提供 `binary`（压缩包内二进制名）、`targetBinary`、`tar`、`formatOverrides`、`replacements`、`categories`、`versionCmd` 等；
   - **禁止直接编辑 hd-home 的 README.md**——它由 `README.tpl` 经 yaml-readme 自动生成。
-- 提交前先确认研发的分支策略；PR 描述给出工具名、仓库链接与安装验证方式（如 `hd get <name>`）。
+- **验证优先靠外生手段**：hd-home 的 PR CI 会用 `hd install` 实测 PR 里每个 config yml 的资产拉取安装，模板与资产不匹配直接失败——PR 说明依赖它兜底；本地可 `make copy-config` 把 yml 拷进 `~/.config/hd-home/config/` 后 `hd install <name>` 实测。PR 描述给出工具名、仓库链接与安装验证方式（如 `hd get <name>`）。
 
 ## 8. 开源仓库自动化（GitHub Actions）
 
